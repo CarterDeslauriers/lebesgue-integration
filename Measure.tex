@@ -3,6 +3,7 @@
 \usepackage{parskip}
 \usepackage{setspace}
 \usepackage{titlesec}
+\usepackage{comment}
 
 \onehalfspacing
 \setlength{\jot}{12pt}
@@ -30,15 +31,10 @@
 \begin{document}
 \maketitle
 
-\section{Introduction: Who Cares}
-
-Write in the Introduction about why measure in general
+\section{Introduction: Motivation}
 
 
-\section{Pointwise Convergence: Breaking at the Limit}
-\subsection{Motivation for DCT}
-\subsubsection{Pointwise Convergence}
-
+\begin{comment}
 % EXAMPLE FUNCTION
 Consider the sequence of functions defined on $[0, 1]$
 
@@ -272,7 +268,10 @@ This gives
     \lim_{n \to \infty}\int_{0}^{1} f_n = 1 \neq 0 = \int_{0}^{1} f
 \end{equation*}
 
-
+Interesting example but I don't currently see how I am going to use it. I can
+go on about how measure fails here too but why needed. I also have the definitions
+which I could also use later so I will have to see about the use of this section.
+Maybe I keep it in to like prep the reader of real analysis.
 
 \end{proof}
 
@@ -281,12 +280,161 @@ riemann and lebesgue measure break here, its a motivation for DCT)
 
 
 
-\subsection{How Lebesgue Measure Explains the failure; and then saves us through DCT}
+\end{comment}
+
+
+% DEFINITIONS SECTION
+\subsection{Definitions}
+
+I will begin with the definition of Riemann Integration.
+
+% RIEMANN INTEGRATION DEFINITION
+\begin{definition}[Reimann Integration]
+    Let $f$ be a bounded function $f\text{:} [a, b] \to \mathbb{R}$.
+    Let $P$ be a partition of the domain of the form
+    \begin{equation*}
+        P = \{x_0, x_1, \ldots, x_n\}
+    \end{equation*}
+    Such that 
+    \begin{equation*}
+        a = x_0 < x_1 < \ldots < x_n = b
+    \end{equation*}
+
+    If for every $\epsilon > 0$ there exists a partion $P_e$ 
+    such that $U(f, P_\epsilon) - L(f, P_\epsilon) < \epsilon$ then $f(x)$ is
+    Riemann Integrable with $\int f = U(f) = L(f).$
+
+    Where $U(f, P)$ is the upper sums
+    \begin{equation*}
+        U(f, P_\epsilon) = \sum_{k=1}^{n} (x_k - x_{k-1}) \sup_{[x_{k-1}, x_k]} f
+    \end{equation*}
+    and $U(f)$ is $\inf$ over all paritions $P$
+    \begin{equation*}
+        U(f) = \inf_P U(f, P)
+    \end{equation*}
+    
+    Where $L(f, P)$ is the lower sums
+    \begin{equation*}
+        L(f, P_\epsilon) = \sum_{k=1}^{n} (x_k - x_{k-1}) \inf_{[x_{k-1}, x_k]} f
+    \end{equation*}
+    and $L(f)$ is $\sup$ over all paritions $P$
+    \begin{equation*}
+        L(f) = \sup_P L(f, P)
+    \end{equation*}
+
+\end{definition}
+
+
+
+
 
 (Show that for a function on [0, 1] enumerating the ratioanls convergeing to dirchlet
 the function at the limit isnt in the class of riemann integrable functions
-we know this because lebesgue defines whats riemann integrable;
-then we say that under DCT which is satisifies integrating with respect to measure
-we can swap the integral and the limit and it holds even though its pointwise)
+we know this because lebesgue defines whats riemann integrable; to get there explain
+measure 0 first don't give the entire lebesgue measure defintion in the motiviation, say
+you cna intergate it with repsect to meausre then later explain through the paper;
+and explain where that fails and later why sigma algebra and then vitalli and so on.
+
+
+
+
+
+
+% RIEMANN FAILURE SECTION
+\subsection{Riemann Failure}
+
+
+% FUNCTION
+\subsubsection{Function}
+Let the sequence of rational numbers $\{r_1, r_2, \ldots\}$ enumerate the rationals on $[0, 1]$.
+
+Let $f_n(x)$ be a series of functions of the form
+\begin{equation}
+    f_n(x) = \begin{cases}
+    1: & x \in \{r_1, r_2, \ldots, r_n\} \\
+    0: & x \not\in \{r_1, r_2, \ldots, r_n\}
+          \end{cases}
+\end{equation}
+
+
+% UPPER AND LOWER SUMS
+\subsubsection{Upper and Lower Sums}
+Fix $n \in \mathbb{N}$.
+
+Take the partition $P_n$ such that $(x_k - x_{k-1}) \leq \epsilon/4n$ for all consecutive
+pairs of points in $P_n$. 
+
+The total number of intervals in which there are rationals numbers is 2n;
+since there are n rationals where each can be in at most 2 intervals at once (Footnote this maybe)
+(if $r_k = x_k$ for instance then $[x_{k-1}, x_k]$ and $[x_k, x_{k+1}]$ both contains $r_k$). 
+
+This gives
+\begin{equation*}
+    U(f_n, P_n) = (\epsilon/4n)(2n)(1) + (1)(0) = \epsilon/2
+\end{equation*}
+
+Where each length $(x_k - x_{k-1}) = (\epsilon/4n)$, there exists at most $2n$ of these intervals, 
+each with $\sup_{[x_k - x_{k-1}]} f = 1$. All other possible intervals have a max combined length of 1,
+each with $\sup_{[x_k - x_{k-1}]} f = 0$.
+
+Since $\mathbb{I}$ is dense in $\mathbb{R}$, between any two real numbers there exists an irrational.
+Meaning on any interval $[x_{k-1}, x_k]$, $\inf_{[x_{k-1}, x_k]} f = 0$ giving
+\begin{equation*}
+    L(f_n, P_n) = 0
+\end{equation*}
+
+This gives for any $\epsilon > 0$ for some $N \in \mathbb{N}$ whenever $n \geq N$ it follows
+\begin{equation*}
+    U(f_n, P_n) - L(f_n, P_n) = \epsilon/2 < \epsilon
+\end{equation*}
+
+meaning the function is Riemann integrable with
+\begin{equation*}
+    \int_{0}^{1} f_n = L(f_n) = 0
+\end{equation*}
+
+
+% LIMIT
+\subsubsection{Limit}
+Since the sequence of values $r_k$ are countable we have 
+\begin{equation}
+    \lim_{n \to \infty} f_n = \begin{cases}
+                        1: & x \in \mathbb{Q} \cap [0, 1] \\
+                        0: & x \not\in \mathbb{Q} \cap [0, 1]
+                        \end{cases}
+\end{equation}
+
+Call this function $f(x)$
+
+Now for any partition $P$ since both $\mathbb{Q}$ is dense in $\mathbb{R}$
+as well as $\mathbb{I}$ dense in $\mathbb{R}$ on any interval $[x_{k-1}, x_k] \in P$
+there exists both a rational and irrational.
+
+This gives $\inf_{[x_{k-1}, x_k]} f = 0$ as well $\sup_{[x_k - x_{k-1}]} f = 1$ on every interval.
+Which forces
+\begin{equation*}
+    U(f, P) = 1
+\end{equation*}
+and
+\begin{equation*}
+    L(f, P) = 0
+\end{equation*}
+
+for every partition $P$ implying $U(f) = 1$ and $L(f) = 0$ which says that $f$ is
+not Riemann integrable.
+
+(Give measure 0 working here first and then explain how Riemann doesn't tell us of its
+own failure we need Lebesgue criterion, maybe start with the definition of measure 0
+and briefly introduce outer measure)
+
+
+
+\subsection{Lebesgue Savior}
+\subsection{Lebesgue Explanation}
+
+
+
+
+
 
 \end{document}
