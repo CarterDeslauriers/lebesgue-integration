@@ -1,0 +1,292 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{parskip}
+\usepackage{setspace}
+\usepackage{titlesec}
+
+\onehalfspacing
+\setlength{\jot}{12pt}
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+% For the space in definitions
+\makeatletter
+\def\thm@space@setup{%
+  \thm@preskip=1.5em
+  \thm@postskip=1.5em
+}
+\makeatother
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{Why Measure Theory}
+\author{Carter Deslauriers}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Introduction: Who Cares}
+
+Write in the Introduction about why measure in general
+
+
+\section{Pointwise Convergence: Breaking at the Limit}
+\subsection{Motivation for DCT}
+\subsubsection{Pointwise Convergence}
+
+% EXAMPLE FUNCTION
+Consider the sequence of functions defined on $[0, 1]$
+
+\begin{equation}
+f_n(x) = \begin{cases}
+    n: & 0 < x \leq \frac{1}{n} \\
+    0: & x = 0, \text{ } \frac{1}{n} < x \leq 1
+          \end{cases}
+\end{equation}
+
+First to show that $f_n(x) \to f(x) = 0$ pointwise consider the definition.
+
+
+
+% DEFINITION OF POINTWISE CONVERGENCE
+\begin{definition}[Pointwise Convergence]
+For every $\epsilon > 0$ there exists some $N \in \mathbb{N}$ such that whenever $n \geq N$ it
+follows that
+\begin{equation*}
+    |f_n(x) - f(x)| < \epsilon
+\end{equation*}
+\end{definition}
+
+% PROOF OF POINTWISE CONVERGENCE
+To prove the function converges pointwise I will show it satisfies the defintion
+
+\begin{proof}
+Subsituting our functions gives
+
+\begin{equation*}
+    |f_n(x) - 0| = 0 < \epsilon \text{ whenever } \frac{1}{n} < x
+\end{equation*}
+
+By the archimedean property we know for any $x \in \mathbb{R}$ there exists an $N \in \mathbb{N}$
+such that whenever
+
+\begin{align*}
+    n \geq N
+    &\implies \frac{1}{n} < x \\
+    &\implies |f_n(x) - 0| = 0 \\
+    &\implies |f_n(x) - 0| < \epsilon
+\end{align*}
+
+For the special case of $x = 0$ observe that $f_n(0) = 0$ giving 
+
+\begin{align*}
+    f_n(0) = 0
+    &\implies |f_n(0) - 0| = 0 \\
+    &\implies |f_n(0) - 0| < \epsilon
+\end{align*}
+
+Meaning our function converges pointwise to $f(x)$ for $f(x) = 0$
+
+\end{proof}
+
+
+Now to show the function does not converge uniformly first consider the
+defintion of uniform convergence
+
+% DEFINITION OF UNIFORM CONVERGENCE
+\begin{definition}[Uniform Convergence]
+    For every $\epsilon > 0$ there exists some $N \in \mathbb{N}$ such that whenever $n \geq N$ it
+    follows that for all $x$
+    \begin{equation*}
+        |f_n(x) - f(x)| < \epsilon
+    \end{equation*}
+\end{definition}
+
+To show that $f_n(x) \not\to f(x)$ uniformally, I will show there exists no such $N$
+satisfying the defintion for all $x$ at once.
+
+
+% PROOF FOR NON UNIFROM CONVERGENCE
+\begin{proof}
+
+For contradiction assume there exists $N \in \mathbb{N}$ such that whenever $n \geq N$
+\begin{equation*}
+    |f_n(x) - f(x)| < \epsilon
+\end{equation*}
+for all $x$
+
+Observe that for any such $N$
+
+\begin{equation*}
+    f_n(x) = n, \text{ for } 0 < x \leq\frac{1}{n}
+\end{equation*}
+
+Choose any $\epsilon \leq 1$ specifcally I choose $\frac{1}{2}$ and call it $\epsilon_0$, 
+then it is that case that for $0 < x \leq\frac{1}{n}$
+
+\begin{equation*}
+    |f_n(x) - 0| = n \implies |f_n(x) - 0| \geq \epsilon_0
+\end{equation*}
+
+But thats a contradiction since $f_n(x) \to f(x)$ uniformally gives an $N$ that works
+for all $x$ at once. Meaning $f_n(x) \not\to f(x)$ uniformally.
+
+\end{proof}
+
+
+% BREAKING LIMIT SECTION
+\subsubsection{Limit Breaking}
+
+To show that
+
+\begin{equation}
+    \lim_{n \to \infty}\int_0^1 f_n(x)\,dx \neq \int_0^1 f(x)\,dx
+\end{equation}
+
+Consider both methods of integration and there definitions
+
+% RIEMANN INTEGRATION DEFINTION
+\begin{definition}[Reimann Integration]
+    Let $f$ be a bounded function $f: [a, b] \to \mathbb{R}$.
+    Let $P$ be a partition of the domain of the form
+    \begin{equation*}
+        P = \{x_0, x_1, \ldots, x_n\}
+    \end{equation*}
+    Such that 
+    \begin{equation*}
+        a = x_0 < x_1 < \ldots < x_n = b
+    \end{equation*}
+    If for every $\epsilon > 0$ there exists a partion $P_e$ 
+    such that $U(f, P_\epsilon) - L(f, P_\epsilon) < \epsilon$ then $f(x)$ is
+    Riemann Integrable with $\int f = U(f) = L(f).$
+
+    Where 
+    \begin{equation*}
+        U(f, P_\epsilon) = \sum_{k=1}^{n} (x_k - x_{k-1}) \sup_{[x_{k-1}, x_k]} f
+    \end{equation*}
+    \begin{equation*}
+        L(f, P_\epsilon) = \sum_{k=1}^{n} (x_k - x_{k-1}) \inf_{[x_{k-1}, x_k]} f
+    \end{equation*}
+    
+    and
+    \begin{equation*}
+        U(f) = \inf_P U(f, P)
+    \end{equation*}
+    \begin{equation*}
+        L(f) = \sup_P L(f, P)
+    \end{equation*}
+
+\end{definition}
+
+
+% LEBESEGUE INTEGRATION DEFINITION
+\begin{definition}[Lebesgue Integration]
+    Let $(X, S, \mu)$ be a measure space and let $f(x) \to \mathbb{R}$
+    then $\int f = \sup L(f, P)$.
+
+    Where P is an $S$-Partition. Where an $S$-Partition is of the form
+    \begin{equation*}
+        P = {E_1, E_2, \ldots, E_n}
+    \end{equation*}
+    Where each $E_k \in S$ and 
+    \begin{equation*}
+        \bigcup_k E_k = X
+    \end{equation*}
+    
+    and
+    \begin{equation*}
+        \mathbb{L}(f, P) = \sum_k \mu(E_k)\inf_{E_k} f
+    \end{equation*}
+
+
+\end{definition}
+
+Now I will show in accordance with the definitions neither integration method
+will suffice swapping the integral and the limit
+
+% PROOF RIEMANN INTEGRATION FAILS AT THE LIMIT
+\begin{proof}
+First I will show that for any fixed n $f_n(x)$ is Riemann Integrable.
+
+Fix $n \in \mathbb{N}$, first observe $|f_n(x) \leq n$
+for all $x \in [0, 1]$. Now take the partition where
+\begin{equation*}
+    P_n = \{0, \epsilon/8n, \frac{1}{n} - \epsilon/16n, \frac{1}{n} + \epsilon/16n, 1\}
+    \text{ for } n > 1 \text{ and } P_1 = \{0, 1\}
+\end{equation*}
+
+Then summing length times $\sup$ on each interval
+\begin{align*}
+    U(f_n, P_n) &= (\epsilon/8n - 0)(n) \\
+    &\quad + ((\frac{1}{n} - \epsilon/16n) - (\epsilon/16n))(n) \\
+    &\quad + ((\frac{1}{n} + \epsilon/16n) - (\frac{1}{n} - \epsilon/16n))(0) \\
+    &= (\epsilon/8n)(n) + (\frac{1}{n} - \epsilon/16n)(n) + (\epsilon/16n)(0) \\
+    &= (\epsilon/8) + (1 + \epsilon/8) \\
+    &= 1 + \epsilon/4
+\end{align*}
+and summing lengths times $\inf$ on each interval
+\begin{align*}
+    L(f_n, P_n) &= (\epsilon/8n - 0)(0) \\
+    &\quad + ((\frac{1}{n} - \epsilon/16n) - (\epsilon/16n))(n) \\
+    &\quad + ((\frac{1}{n} + \epsilon/16n) - (\frac{1}{n} - \epsilon/16n))(n) \\
+    &= (\epsilon/8n)(0) + (\frac{1}{n} - \epsilon/8n)(n) + (\epsilon/8n)(0) \\
+    &= 1 - \epsilon/8
+\end{align*}
+
+Giving for every $\epsilon > 0$
+\begin{align*}
+    U(f_n, P_n) - L(f_n, P_n) = 3\epsilon/8
+    &< \epsilon
+\end{align*}
+
+This gives
+\begin{equation*}
+    1 - \epsilon/8 \leq L(f_n) = \int_{0}^{1} f_n = U(f_n) \leq 1 + \epsilon/4
+\end{equation*}
+
+Since $L(f_n, P_n) \leq L(f_n)$ and $U(f_n) \leq U(f_n, P_n)$ for all paritions $P$.
+Since the above equation holds for all $\epsilon > 0$ we have
+\begin{equation*}
+    \int_{0}^{1} f_n = 1
+\end{equation*}
+for all fixed n
+
+giving
+\begin{equation*}
+    \lim_{n \to \infty}\int_{0}^{1} f_n = 1
+\end{equation*}
+
+Now taking any partition P will give
+\begin{equation*}
+    \int_{0}^{1} f = 0
+\end{equation*}
+Since $\sup$ and $\inf$ will be 0 on any interval as $f(x) = 0$ everywhere.
+
+This gives
+\begin{equation*}
+    \lim_{n \to \infty}\int_{0}^{1} f_n = 1 \neq 0 = \int_{0}^{1} f
+\end{equation*}
+
+
+
+\end{proof}
+
+(No matter how we integrate this its not going to work both 
+riemann and lebesgue measure break here, its a motivation for DCT)
+
+
+
+\subsection{How Lebesgue Measure Explains the failure; and then saves us through DCT}
+
+(Show that for a function on [0, 1] enumerating the ratioanls convergeing to dirchlet
+the function at the limit isnt in the class of riemann integrable functions
+we know this because lebesgue defines whats riemann integrable;
+then we say that under DCT which is satisifies integrating with respect to measure
+we can swap the integral and the limit and it holds even though its pointwise)
+
+\end{document}
