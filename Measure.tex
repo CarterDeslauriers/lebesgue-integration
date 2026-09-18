@@ -25,7 +25,7 @@
 \makeatother
 
 \theoremstyle{remark}
-\newtheorem*{remark}{Remark}
+\newtheorem*{remark}{Note}
 
 \title{Why Measure Theory}
 \author{Carter Deslauriers}
@@ -286,15 +286,18 @@ riemann and lebesgue measure break here, its a motivation for DCT)
 \end{comment}
 
 
+
+
+
+
+
 % DEFINITIONS SECTION
 \subsection{Definitions}
 
 I will begin with the definition of Riemann Integration.
 
-% RIEMANN INTEGRATION DEFINITION
-\begin{definition}[Reimann Integration]
-    Let $f$ be a bounded function $f\colon [a, b] \to \mathbb{R}$.
-    Let $P$ be a partition of the domain of the form
+\begin{definition}[Partition]
+    Let $[a, b]$ be the domain of a function then $P$ a parition is of the form
     \begin{equation*}
         P = \{x_0, x_1, \ldots, x_n\}
     \end{equation*}
@@ -302,16 +305,27 @@ I will begin with the definition of Riemann Integration.
     \begin{equation*}
         a = x_0 < x_1 < \ldots < x_n = b
     \end{equation*}
+\end{definition}
 
-    If for every $\epsilon > 0$ there exists a partion $P_e$ 
-    such that $U(f, P_\epsilon) - L(f, P_\epsilon) < \epsilon$ then $f(x)$ is
-    Riemann Integrable with $\int f = U(f) = L(f).$
+% RIEMANN INTEGRATION DEFINITION
+\begin{definition}[Reimann Integration]
+    Let $f$ be a bounded function $f\colon [a, b] \to \mathbb{R}$.
+
+    If for every $\epsilon > 0$ there exists a partion $P_e$ such that 
+    \begin{equation}
+        U(f, P_\epsilon) - L(f, P_\epsilon) < \epsilon
+    \end{equation}
+
+    then $f(x)$ is Riemann Integrable with 
+    \begin{equation}
+        \int f = U(f) = L(f)
+    \end{equation}
 
     Where $U(f, P)$ is the upper sums
     \begin{equation*}
         U(f, P_\epsilon) = \sum_{k=1}^{n} (x_k - x_{k-1}) \sup_{[x_{k-1}, x_k]} f
     \end{equation*}
-    and $U(f)$ is $\inf$ over all paritions $P$
+    and $U(f)$ is
     \begin{equation*}
         U(f) = \inf_P U(f, P)
     \end{equation*}
@@ -320,18 +334,13 @@ I will begin with the definition of Riemann Integration.
     \begin{equation*}
         L(f, P_\epsilon) = \sum_{k=1}^{n} (x_k - x_{k-1}) \inf_{[x_{k-1}, x_k]} f
     \end{equation*}
-    and $L(f)$ is $\sup$ over all paritions $P$
+    and $L(f)$ is
     \begin{equation*}
         L(f) = \sup_P L(f, P)
     \end{equation*}
 
 \end{definition}
 
-
-
-
-
-(Shorten this section its in introduction to show that riemann integration fails here)
 
 
 
@@ -360,12 +369,16 @@ Let $f_n(x)$ be a series of functions of the form
 \subsubsection{Upper and Lower Sums}
 Fix $n \in \mathbb{N}$.
 
-Take the partition $P_n$ such that $(x_k - x_{k-1}) \leq \frac{\epsilon}{4n}$ for all consecutive
+Take the partition $P_n$ such that $(x_k - x_{k-1}) = \frac{\epsilon}{4n}$ for all consecutive
 pairs of points in $P_n$. 
 
 The total number of intervals in which there are rationals numbers is 2n;
-since there are n rationals where each can be in at most 2 intervals at once (Footnote this maybe)
-(if $r_k = x_k$ for instance then $[x_{k-1}, x_k]$ and $[x_k, x_{k+1}]$ both contains $r_k$). 
+since there are n rationals where each can be in at most 2 intervals at once.
+
+\begin{remark}
+    if $r_k = x_k$ for instance then $[x_{k-1}, x_k]$ and $[x_k, x_{k+1}]$ both contains $r_k$
+\end{remark}
+
 
 This gives
 \begin{equation*}
@@ -403,10 +416,10 @@ Since the sequence of values $r_k$ are countable we have
                         \end{cases}
 \end{equation}
 
-Call this function $f(x)$
+Call this function $f$
 
-Now for any partition $P$ since both $\mathbb{Q}$ is dense in $\mathbb{R}$
-as well as $\mathbb{I}$ dense in $\mathbb{R}$ on any interval $[x_{k-1}, x_k] \in P$
+Now for any partition $P$, since both $\mathbb{Q}$ is dense in $\mathbb{R}$
+as well as $\mathbb{I}$ dense in $\mathbb{R}$, on any interval $[x_{k-1}, x_k] \in P$
 there exists both a rational and irrational.
 
 This gives $\inf_{[x_{k-1}, x_k]} f = 0$ as well $\sup_{[x_k - x_{k-1}]} f = 1$ on every interval.
@@ -422,10 +435,6 @@ and
 for every partition $P$ implying $U(f) = 1$ and $L(f) = 0$ which says that $f$ is
 not Riemann integrable.
 
-(Give measure 0 working here first and then explain how Riemann doesn't tell us of its
-own failure we need Lebesgue criterion, maybe start with the definition of measure 0
-and briefly introduce outer measure)
-
 
 % LEBESGUE SAVIOR SECTION
 \subsection{Lebesgue Explanation}
@@ -435,8 +444,18 @@ and briefly introduce outer measure)
 
 \begin{definition}[Measure 0]
     $A$ is a measure zero set if for every $\epsilon > 0$ there exists a countable covering $\bigcup_n O_n$ 
-    where each $O_n$ is an open interval such that  $A \subset \bigcup_n O_n$ where
-    $\sum_{n} l(O_n) \leq \epsilon$. Where l() denotes the length of a open interval defined
+    where each $O_n$ is an open interval such that  
+
+    \begin{equation}
+        A \subset \bigcup_n O_n
+    \end{equation}
+    
+    Where 
+    \begin{equation}
+        \sum_{n} l(O_n) \leq \epsilon
+    \end{equation}
+
+    and l() denotes the length of a open interval defined
     as $b - a$ for any open interval $(a, b)$.
 \end{definition}
 
@@ -447,7 +466,7 @@ and briefly introduce outer measure)
 By the Lebesgue criterion
 \begin{theorem}[Lebesgue Criterion]
     A bounded function $f\colon [a, b] \to \mathbb{R}$ is Riemann integrable iff the set of discounties 
-    is of Measure 0
+    is Measure 0
 \end{theorem}
 
 
@@ -462,7 +481,8 @@ Recall that
                         \end{cases}
 \end{equation*}
 
-Observe the definition of continuity.
+I want to show that f is discontinous on all of $[0, 1]$
+First observe the definition of continuity.
 
 \begin{definition}
     A function f is continuous at a point c if for every $\epsilon > 0$
@@ -474,25 +494,29 @@ Now fix $\epsilon_0 \leq 1$ take $\epsilon_0 = \frac{1}{2}$. Choose any point $c
 Again both $\mathbb{Q}$ and $\mathbb{I}$ dense in $\mathbb{R}$.
 
 First consider $c \in \mathbb{Q}$ then for any $\delta$ chosen there exists some irrational point
-$x \in (c - \delta, c + \delta)$ giving $|f(x) - f(c)| = 1 \geq \epsilon_0$.
+\begin{equation}
+    x \in (c - \delta, c + \delta) \implies |f(x) - f(c)| = 1 \geq \epsilon_0
+\end{equation}
 
 Consider the case $c \in \mathbb{I}$ then for any $\delta$ chosen there exists some rational point
-$x \in (c - \delta, c + \delta)$ giving $|f(x) - f(c)| = 1 \geq \epsilon_0$.
+\begin{equation}
+    x \in (c - \delta, c + \delta) \implies |f(x) - f(c)| = 1 \geq \epsilon_0
+\end{equation}
 
-Meaning the set of discontinuous points of $f$ is all of $[0, 1]$ which has total measure $1$.
+Meaning the set of discontinuous points of $f$ is all of $[0, 1]$
 
 To show that the set of discontinuities for every $f_n$ is measure 0 first consider the points of
 discontinuity. From the section above $f_n$ is discontinuous at every $x \in \{r_1, r_2, \ldots, r_n\}$.
-For any points $x \not\in \{r_1, r_2, \ldots, r_n\}$ we can take $\delta = \frac{\min(|x - r_1, |x - r_2|,
+For any points $x \not\in \{r_1, r_2, \ldots, r_n\}$ we can take $\delta = \frac{\min(|x - r_1|, |x - r_2|,
 \ldots, |x - r_n|)}{2}$ since there are a fixed amount of rationals for any fixed $n \in \mathbb{N}$.
-This would give us for $|x - c| < \delta \implies |f(x) - f(c)| = 0 < \epsilon$ making $f_n$ continious
+This would give us for $|x - c| < \delta \implies |f(x) - f(c)| = 0 < \epsilon$ making $f_n$ continuous
 on any points $x \not\in \{r_1, r_2, \ldots, r_n\}$. 
 
 Now consider the open covering
 $\bigcup_k O_k$ such that each $O_k = (r_k - \frac{\epsilon}{2^{k+1}}, r_k + \frac{\epsilon}{2^{k+1}})$.
 Call $D_n$ the set of discontinoutis of $f_n$. Then $D_n \subset \bigcup_k O_k$ where
 \begin{align*}
-    \sum_k l(O_k) &= \sum_k \frac{\epsilon}{2^{k}}
+    \sum_k l(O_k) &= \sum_k \frac{\epsilon}{2^{k}} \\
     &= \frac{\frac{\epsilon}{2}}{1 - \frac{1}{2}} \\
     &= \epsilon 
 \end{align*}
