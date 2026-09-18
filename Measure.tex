@@ -331,12 +331,8 @@ I will begin with the definition of Riemann Integration.
 
 
 
-(Show that for a function on [0, 1] enumerating the ratioanls convergeing to dirchlet
-the function at the limit isnt in the class of riemann integrable functions
-we know this because lebesgue defines whats riemann integrable; to get there explain
-measure 0 first don't give the entire lebesgue measure defintion in the motiviation, say
-you cna intergate it with repsect to meausre then later explain through the paper;
-and explain where that fails and later why sigma algebra and then vitalli and so on.
+(Shorten this section its in introduction to show that riemann integration fails here)
+
 
 
 
@@ -466,7 +462,7 @@ Recall that
                         \end{cases}
 \end{equation*}
 
-Take any point $x \in [0, 1]$. Observe the definition of continuity.
+Observe the definition of continuity.
 
 \begin{definition}
     A function f is continuous at a point c if for every $\epsilon > 0$
@@ -485,8 +481,31 @@ $x \in (c - \delta, c + \delta)$ giving $|f(x) - f(c)| = 1 \geq \epsilon_0$.
 
 Meaning the set of discontinuous points of $f$ is all of $[0, 1]$ which has total measure $1$.
 
-Which explains why $f$ is not Riemann integrable at the limit but Riemann integrable for
-every $f_n$.
+To show that the set of discontinuities for every $f_n$ is measure 0 first consider the points of
+discontinuity. From the section above $f_n$ is discontinuous at every $x \in \{r_1, r_2, \ldots, r_n\}$.
+For any points $x \not\in \{r_1, r_2, \ldots, r_n\}$ we can take $\delta = \frac{\min(|x - r_1, |x - r_2|,
+\ldots, |x - r_n|)}{2}$ since there are a fixed amount of rationals for any fixed $n \in \mathbb{N}$.
+This would give us for $|x - c| < \delta \implies |f(x) - f(c)| = 0 < \epsilon$ making $f_n$ continious
+on any points $x \not\in \{r_1, r_2, \ldots, r_n\}$. 
+
+Now consider the open covering
+$\bigcup_k O_k$ such that each $O_k = (r_k - \frac{\epsilon}{2^{k+1}}, r_k + \frac{\epsilon}{2^{k+1}})$.
+Call $D_n$ the set of discontinoutis of $f_n$. Then $D_n \subset \bigcup_k O_k$ where
+\begin{align*}
+    \sum_k l(O_k) &= \sum_k \frac{\epsilon}{2^{k}}
+    &= \frac{\frac{\epsilon}{2}}{1 - \frac{1}{2}} \\
+    &= \epsilon 
+\end{align*}
+
+giving $\sum_k l(O_k) \leq \epsilon$ making $D_n$ measure 0 by definition.
+
+We know understand why each $f_n$ integrates but $f$ itself fails to integrate in terms of
+language of measure outside of the realm of the lanague of Riemann integration itself. 
+
+We also begin to see that the method of breaking functions up by there domain in a fixed fashion
+fails to work when our functions ossolate to quickly and will fail to work in more general spaces
+outside of R itself. 
+
 
 \subsection{Lebesgue Savior}
 
