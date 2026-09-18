@@ -10,6 +10,9 @@
 \titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
 \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
 
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
 
@@ -290,7 +293,7 @@ I will begin with the definition of Riemann Integration.
 
 % RIEMANN INTEGRATION DEFINITION
 \begin{definition}[Reimann Integration]
-    Let $f$ be a bounded function $f\text{:} [a, b] \to \mathbb{R}$.
+    Let $f$ be a bounded function $f\colon [a, b] \to \mathbb{R}$.
     Let $P$ be a partition of the domain of the form
     \begin{equation*}
         P = \{x_0, x_1, \ldots, x_n\}
@@ -361,7 +364,7 @@ Let $f_n(x)$ be a series of functions of the form
 \subsubsection{Upper and Lower Sums}
 Fix $n \in \mathbb{N}$.
 
-Take the partition $P_n$ such that $(x_k - x_{k-1}) \leq \epsilon/4n$ for all consecutive
+Take the partition $P_n$ such that $(x_k - x_{k-1}) \leq \frac{\epsilon}{4n}$ for all consecutive
 pairs of points in $P_n$. 
 
 The total number of intervals in which there are rationals numbers is 2n;
@@ -370,10 +373,10 @@ since there are n rationals where each can be in at most 2 intervals at once (Fo
 
 This gives
 \begin{equation*}
-    U(f_n, P_n) = (\epsilon/4n)(2n)(1) + (1)(0) = \epsilon/2
+    U(f_n, P_n) = (\frac{\epsilon}{4n})(2n)(1) + (1)(0) = \frac{\epsilon}{2}
 \end{equation*}
 
-Where each length $(x_k - x_{k-1}) = (\epsilon/4n)$, there exists at most $2n$ of these intervals, 
+Where each length $(x_k - x_{k-1}) = (\frac{\epsilon}{4n})$, there exists at most $2n$ of these intervals, 
 each with $\sup_{[x_k - x_{k-1}]} f = 1$. All other possible intervals have a max combined length of 1,
 each with $\sup_{[x_k - x_{k-1}]} f = 0$.
 
@@ -385,7 +388,7 @@ Meaning on any interval $[x_{k-1}, x_k]$, $\inf_{[x_{k-1}, x_k]} f = 0$ giving
 
 This gives for any $\epsilon > 0$ for some $N \in \mathbb{N}$ whenever $n \geq N$ it follows
 \begin{equation*}
-    U(f_n, P_n) - L(f_n, P_n) = \epsilon/2 < \epsilon
+    U(f_n, P_n) - L(f_n, P_n) = \frac{\epsilon}{2} < \epsilon
 \end{equation*}
 
 meaning the function is Riemann integrable with
@@ -428,9 +431,64 @@ own failure we need Lebesgue criterion, maybe start with the definition of measu
 and briefly introduce outer measure)
 
 
+% LEBESGUE SAVIOR SECTION
+\subsection{Lebesgue Explanation}
+
+% MEASURE 0
+\subsubsection{Measure 0}
+
+\begin{definition}[Measure 0]
+    $A$ is a measure zero set if for every $\epsilon > 0$ there exists a countable covering $\bigcup_n O_n$ 
+    where each $O_n$ is an open interval such that  $A \subset \bigcup_n O_n$ where
+    $\sum_{n} l(O_n) \leq \epsilon$. Where l() denotes the length of a open interval defined
+    as $b - a$ for any open interval $(a, b)$.
+\end{definition}
+
+
+% LEBESGUE CRITERION
+\subsubsection{Lebesgue Criterion}
+
+By the Lebesgue criterion
+\begin{theorem}[Lebesgue Criterion]
+    A bounded function $f\colon [a, b] \to \mathbb{R}$ is Riemann integrable iff the set of discounties 
+    is of Measure 0
+\end{theorem}
+
+
+% F DISCOUNTIOUS EVERYWHERE
+\subsubsection{f discontinous everywhere}
+
+Recall that
+\begin{equation*}
+    \lim_{n \to \infty} f_n = \begin{cases}
+                        1: & x \in \mathbb{Q} \cap [0, 1] \\
+                        0: & x \not\in \mathbb{Q} \cap [0, 1]
+                        \end{cases}
+\end{equation*}
+
+Take any point $x \in [0, 1]$. Observe the definition of continuity.
+
+\begin{definition}
+    A function f is continuous at a point c if for every $\epsilon > 0$
+    there exists a $\delta > 0$ such that whenever $|x - c| < \delta$ it follows that
+    $|f(x) - f(c)| < \epsilon$
+\end{definition}
+
+Now fix $\epsilon_0 \leq 1$ take $\epsilon_0 = \frac{1}{2}$. Choose any point $c \in [0, 1]$.
+Again both $\mathbb{Q}$ and $\mathbb{I}$ dense in $\mathbb{R}$.
+
+First consider $c \in \mathbb{Q}$ then for any $\delta$ chosen there exists some irrational point
+$x \in (c - \delta, c + \delta)$ giving $|f(x) - f(c)| = 1 \geq \epsilon_0$.
+
+Consider the case $c \in \mathbb{I}$ then for any $\delta$ chosen there exists some rational point
+$x \in (c - \delta, c + \delta)$ giving $|f(x) - f(c)| = 1 \geq \epsilon_0$.
+
+Meaning the set of discontinuous points of $f$ is all of $[0, 1]$ which has total measure $1$.
+
+Which explains why $f$ is not Riemann integrable at the limit but Riemann integrable for
+every $f_n$.
 
 \subsection{Lebesgue Savior}
-\subsection{Lebesgue Explanation}
 
 
 
