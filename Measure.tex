@@ -307,11 +307,40 @@ I will begin with the definition of Riemann Integration.
     \end{equation*}
 \end{definition}
 
+
+% UPPER SUMS
+\begin{definition}[Upper sums]
+    Let $f$ be a bounded function $f \colon [a, b] \to \mathbb{R}$, the upper sums for
+    $f$
+    \begin{equation*}
+        U(f, P_\epsilon) = \sum_{k=1}^{n} (x_k - x_{k-1}) \sup_{[x_{k-1}, x_k]} f
+    \end{equation*}
+    Where $U(f)$ is defined as
+    \begin{equation*}
+        U(f) = \inf_P U(f, P)
+    \end{equation*}
+\end{definition}
+
+
+% LOWER SUMS
+\begin{definition}[Lower sums]
+    Let $f$ be a bounded function $f \colon [a, b] \to \mathbb{R}$, the lower sums for
+    $f$
+    \begin{equation*}
+        L(f, P_\epsilon) = \sum_{k=1}^{n} (x_k - x_{k-1}) \inf_{[x_{k-1}, x_k]} f
+    \end{equation*}
+    Where $L(f)$ is defined as 
+    \begin{equation*}
+        L(f) = \sup_P L(f, P)
+    \end{equation*}
+\end{definition}
+
+
 % RIEMANN INTEGRATION DEFINITION
 \begin{definition}[Reimann Integration]
-    Let $f$ be a bounded function $f\colon [a, b] \to \mathbb{R}$.
+    Let $f$ be a bounded function $f \colon [a, b] \to \mathbb{R}$.
 
-    If for every $\epsilon > 0$ there exists a partion $P_e$ such that 
+    If for every $\epsilon > 0$ there exists a partition $P_e$ such that 
     \begin{equation}
         U(f, P_\epsilon) - L(f, P_\epsilon) < \epsilon
     \end{equation}
@@ -320,25 +349,6 @@ I will begin with the definition of Riemann Integration.
     \begin{equation}
         \int f = U(f) = L(f)
     \end{equation}
-
-    Where $U(f, P)$ is the upper sums
-    \begin{equation*}
-        U(f, P_\epsilon) = \sum_{k=1}^{n} (x_k - x_{k-1}) \sup_{[x_{k-1}, x_k]} f
-    \end{equation*}
-    and $U(f)$ is
-    \begin{equation*}
-        U(f) = \inf_P U(f, P)
-    \end{equation*}
-    
-    Where $L(f, P)$ is the lower sums
-    \begin{equation*}
-        L(f, P_\epsilon) = \sum_{k=1}^{n} (x_k - x_{k-1}) \inf_{[x_{k-1}, x_k]} f
-    \end{equation*}
-    and $L(f)$ is
-    \begin{equation*}
-        L(f) = \sup_P L(f, P)
-    \end{equation*}
-
 \end{definition}
 
 
@@ -503,32 +513,62 @@ Consider the case $c \in \mathbb{I}$ then for any $\delta$ chosen there exists s
     x \in (c - \delta, c + \delta) \implies |f(x) - f(c)| = 1 \geq \epsilon_0
 \end{equation}
 
-Meaning the set of discontinuous points of $f$ is all of $[0, 1]$
+Meaning the set of discontinuous points of $f$ is all of $[0, 1]$ where $|[0, 1]| = 1$.
+\begin{remark}
+    I do not prove it here but it is proved in section 2.2
+\end{remark}
 
-To show that the set of discontinuities for every $f_n$ is measure 0 first consider the points of
-discontinuity. From the section above $f_n$ is discontinuous at every $x \in \{r_1, r_2, \ldots, r_n\}$.
-For any points $x \not\in \{r_1, r_2, \ldots, r_n\}$ we can take $\delta = \frac{\min(|x - r_1|, |x - r_2|,
+To show that the set of discontinuities for every $f_n$ is measure 0 first consider the set of
+points at which $f_n$ is discontinuous, call it $D_n$.
+
+For any points $c \in \{r_1, r_2, \ldots, r_n\}$ since $\mathbb{I}$ dense in $\mathbb{R}$
+we have for a fixed $\epsilon < 1$ and any $\delta > 0$
+\begin{equation*}
+    |x - c| < \delta \implies |f(x) - f(c)| = 1 \geq \epsilon
+\end{equation*}
+
+Making 
+
+\begin{equation*}
+    D_n = \{r_1, r_2, \ldots, r_N\}
+\end{equation*}
+
+For any points $c \not\in \{r_1, r_2, \ldots, r_n\}$ we can take $\delta = \frac{\min(|x - r_1|, |x - r_2|,
 \ldots, |x - r_n|)}{2}$ since there are a fixed amount of rationals for any fixed $n \in \mathbb{N}$.
-This would give us for $|x - c| < \delta \implies |f(x) - f(c)| = 0 < \epsilon$ making $f_n$ continuous
-on any points $x \not\in \{r_1, r_2, \ldots, r_n\}$. 
+
+This would give us for 
+\begin{equation*}
+    |x - c| < \delta \implies |f(x) - f(c)| = 0 < \epsilon
+\end{equation*} 
+
+making $f_n$ continuous on any points $x \not\in \{r_1, r_2, \ldots, r_n\}$. 
 
 Now consider the open covering
-$\bigcup_k O_k$ such that each $O_k = (r_k - \frac{\epsilon}{2^{k+1}}, r_k + \frac{\epsilon}{2^{k+1}})$.
-Call $D_n$ the set of discontinoutis of $f_n$. Then $D_n \subset \bigcup_k O_k$ where
+$\bigcup_k O_k$ such that each 
+\begin{equation*}
+    O_k = (r_k - \frac{\epsilon}{2^{k+1}}, r_k + \frac{\epsilon}{2^{k+1}})
+\end{equation*}
+
+Then
 \begin{align*}
     \sum_k l(O_k) &= \sum_k \frac{\epsilon}{2^{k}} \\
     &= \frac{\frac{\epsilon}{2}}{1 - \frac{1}{2}} \\
     &= \epsilon 
 \end{align*}
 
-giving $\sum_k l(O_k) \leq \epsilon$ making $D_n$ measure 0 by definition.
+giving 
+\begin{equation*}
+    \sum_k l(O_k) \leq \epsilon
+\end{equation*} 
 
-We know understand why each $f_n$ integrates but $f$ itself fails to integrate in terms of
-language of measure outside of the realm of the lanague of Riemann integration itself. 
+making $D_n$ measure 0 by definition.
 
-We also begin to see that the method of breaking functions up by there domain in a fixed fashion
-fails to work when our functions ossolate to quickly and will fail to work in more general spaces
-outside of R itself. 
+We know understand why each $f_n$ integrates but $f$ itself fails to integrate.
+Our understanding lays not in the language of the Riemann integral itself but instead in the
+language of measure.  
+
+We also see that the method by which he partition the domain fails for functions
+that osculate to quickly and will fail to be defined in spaces outside of $\mathbb{R}$
 
 
 \subsection{Lebesgue Savior}
@@ -566,11 +606,100 @@ Translation invaraince, subadditivity, monotoncity
 
 I will now prove each in order.
 
-\begin{proof}
-    For monotonicity (1) first consider that any open covering of $B$ is an open covering
-    of $A$, since $A \subset B$. Since outer measure is $\inf$ over all open coverings
-    we have an open covering, 
+\begin{proof}[Proof: Monotoncity]
+    For monotonicity (1) first observe that since since 
+    \begin{equation*}
+    A \subset B \subset \bigcup_k O_k
+    \end{equation*}
+
+    any open covering of $B$ is an open covering of $A$.
+
+    Now outer measure is defined as $\inf$ over all open coverings. Therefore there exists an
+    open covering $\bigcup_k O_k$, such that 
+    \begin{equation*}
+        \bigcup_k l(O_k) < |B| + \epsilon
+    \end{equation*}
+    Since any open covering
+    of $B$ is an open covering of $A$ 
+    \begin{equation*}
+        |A| \leq \sum_k l(O_k) < |B| + \epsilon
+    \end{equation*} 
+    Where $\epsilon$ is arbitrary $> 0$. Meaning $|A| \leq |B|$
 \end{proof}
+
+\begin{proof}[Proof: $\lvert [a, b{]}\rvert = b - a$]
+    For the second property of outer measure consider the open cover 
+    for $[a, b]$ 
+    \begin{equation*}
+        (a - \epsilon, a + \epsilon) \cup (a, b) \cup (b - \epsilon, b + \epsilon)
+    \end{equation*}
+
+    Since $|[a, b]|$ is $\inf$ over all coverings we have 
+    \begin{equation*}
+        |[a, b]| \leq 2\epsilon + b - a + 2\epsilon
+    \end{equation*}
+    Where $\epsilon$ is arbitrary giving 
+    \begin{equation*}
+        |[a, b]| \leq b - a
+    \end{equation*}
+
+    For the other direction consider any open covering of $[a, b]$. I want to show that
+    \begin{equation*}
+        \sum_k l(O_k) \geq b - a
+    \end{equation*}
+
+    hence giving 
+    
+    \begin{equation*}
+        \inf \sum_k l(O_k) \geq b - a
+    \end{equation*}
+    
+    Now $[a, b]$ is a compact interval, by Heine-Borel for every open cover
+    \begin{equation*}
+        [a, b] \subset \bigcup_k O_k
+    \end{equation*}
+    
+    there exists a finite subcollection such that
+    \begin{equation*}
+        [a, b] \subset \bigcup_{k=1}^{n} O_k
+    \end{equation*}
+    
+    Where
+
+    \begin{equation*}
+        \sum_{k=1}^{n} l(O_k) \leq \sum_{k=1}^{\infty} l(O_k)
+    \end{equation*}
+    Since length is non negative. 
+    
+    Suppose the claim holds for $n$ intervals.
+
+    Begin with $n=1$ intervals. Any interval containing $[a, b]$ ie
+    $[a, b] \subset O_k$ has length $l(O_k) \geq b - a$,
+    since 
+    \begin{equation*}
+        (a, b) \subset [a, b] \subset O_k
+    \end{equation*}
+    
+    Now consider $n+1$ intervals covering $[a, b]$. 
+    
+    $b$ must be contained
+    in at least one of these intervals call it $(c, d)$. If $c < a$ then $l(c, d) >= b - a$
+    so consider $a < c < b < d$; since $(c, d)$ covers none of $[a, c]$ we can invoke
+    the inductive hypothesis 
+    \begin{equation*}
+        \sum_{k=1}^{n} l(O_k) \geq c - a
+    \end{equation*} 
+    for $O_k$ covering $[a, c]$. Adding this to $l(c, d)$ gives 
+    \begin{align*}
+        \sum_{k=1}^{n+1} l(O_k) &\geq (c - a) + (d - c) \\
+        &= d - a \\
+        &\geq b - a
+    \end{align*}
+
+    Completing the proof.
+\end{proof}
+
+
 
 \subsection{Failure of Outer Measure as a Measure}
 Actually doesnt give us countable additiivty of disjoint sets though if we consdier the vitali set.
