@@ -706,6 +706,41 @@ I will now prove each in order.
 
 % COUNTABLE SUBADDITIVTY
 \begin{proof}[Proof: Countable Subadditivity]
+    I want to show 
+    \begin{equation*}
+        |\bigcup_k A_k| \leq \sum_k |A_k|
+    \end{equation*}
+
+    Let
+    \begin{equation*}
+        A = \bigcup_k A_k
+    \end{equation*}
+
+    Since outer measure is $\inf$ over all open covers, take for each $A_k$ the open cover
+    \begin{equation*}
+        O_k < |A_k| + \frac{\epsilon}{2^{k+1}}
+    \end{equation*}
+
+    Now since the $O_k$ cover $A$
+    \begin{equation*}
+        A \subset \bigcup_k O_k
+    \end{equation*}
+
+    giving
+    \begin{align*}
+        |A| &\leq |\bigcup_k O_k| \\
+        &= \sum_k |O_k| \\
+        &= \sum_k \frac{\epsilon}{2^{k+1}} \\
+        &= \frac{\epsilon}{2}
+    \end{align*}
+
+    Since this is true for any arbitary $\epsilon$ and $A$ is $\inf$ over all coverings
+    we get 
+    \begin{equation*}
+        |\bigcup_k A_k| \leq \sum_k |A_k|
+    \end{equation*}
+
+    Completing the proof.
 
 \end{proof}
 
