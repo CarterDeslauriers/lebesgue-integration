@@ -579,7 +579,7 @@ that osculate to quickly and will fail to be defined in spaces outside of $\math
 
 
 
-
+% OUTER MEASURE
 \section{Outer Measure}
 
 \begin{definition}[Outer Measure]
@@ -591,6 +591,8 @@ that osculate to quickly and will fail to be defined in spaces outside of $\math
 Outer measure agrees with length on open sets and [a, b] = (a, b) in terms of measure.
 Translation invaraince, subadditivity, monotoncity
 
+
+% PROPERTIES OF OUTER MEASURE
 \begin{theorem}
 
     1. If $A \subset B$ then $|(A)| \leq |(B)|$
@@ -606,6 +608,7 @@ Translation invaraince, subadditivity, monotoncity
 
 I will now prove each in order.
 
+% MONOTONCITY
 \begin{proof}[Proof: Monotoncity]
     For monotonicity (1) first observe that since since 
     \begin{equation*}
@@ -627,6 +630,7 @@ I will now prove each in order.
     Where $\epsilon$ is arbitrary $> 0$. Meaning $|A| \leq |B|$
 \end{proof}
 
+% AGREEMENT ON [a, b]
 \begin{proof}[Proof: $\lvert [a, b{]}\rvert = b - a$]
     For the second property of outer measure consider the open cover 
     for $[a, b]$ 
@@ -699,6 +703,27 @@ I will now prove each in order.
     Completing the proof.
 \end{proof}
 
+
+% COUNTABLE SUBADDITIVTY
+\begin{proof}[Proof: Countable Subadditivity]
+
+\end{proof}
+
+
+% TRANSLATION INVARIANCE
+\begin{proof}[Translation Invariance]
+    I would like to show $|A + t| = |A|$.
+
+    First observe that $l((a, b)) = l((a + t, b + t))$ 
+    since $l((a + t, b +t)) = (b + t) - (a + t) = b - a$
+
+    Now observe that for any open cover of $A$ call it $O_k$, $O_k + T$ covers $A + t$.
+    To see this take a single $y \in A + t$, then $y = x + t$ for some $x \in A$.
+    So $y - t = x$ or $y - t \in A$. (This is wrong pretty sure I'll have to come back later
+    and fix this and finish this section, then Vitalli, then the explaination
+    of why this all connects and why its actually useful, then send it to prof smith, should
+    be done the proofs later or tomorrow.)
+\end{proof}
 
 
 \subsection{Failure of Outer Measure as a Measure}
