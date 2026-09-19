@@ -542,9 +542,35 @@ outside of R itself.
 
 \section{Outer Measure}
 
+\begin{definition}[Outer Measure]
+    $|(A)| = \inf \sum_k l(O_k)$ Where $\inf$ is taken over all open coverings such that
+    $A \subset \bigcup_k O_k$
+\end{definition}
+
 \subsection{Agrees eveyrwhere}
 Outer measure agrees with length on open sets and [a, b] = (a, b) in terms of measure.
 Translation invaraince, subadditivity, monotoncity
+
+\begin{theorem}
+
+    1. If $A \subset B$ then $|(A)| \leq |(B)|$
+
+    2. $|[a, b]| = b - a$
+
+    3. If $A1, A2, \ldots$ are sets such that $\bigcup_k A_k = B$, 
+    then $|B| \leq \sum_k |A_k|$
+
+    4. $|A + t| = |A|$
+
+\end{theorem}
+
+I will now prove each in order.
+
+\begin{proof}
+    For monotonicity (1) first consider that any open covering of $B$ is an open covering
+    of $A$, since $A \subset B$. Since outer measure is $\inf$ over all open coverings
+    we have an open covering, 
+\end{proof}
 
 \subsection{Failure of Outer Measure as a Measure}
 Actually doesnt give us countable additiivty of disjoint sets though if we consdier the vitali set.
