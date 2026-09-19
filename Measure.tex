@@ -4,6 +4,7 @@
 \usepackage{setspace}
 \usepackage{titlesec}
 \usepackage{comment}
+\usepackage[framemethod=TikZ]{mdframed}
 
 \onehalfspacing
 \setlength{\jot}{12pt}
@@ -11,21 +12,30 @@
 \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
 
 \theoremstyle{plain}
-\newtheorem{theorem}{Theorem}
+\newmdtheoremenv[
+  linewidth=1pt, linecolor=black,
+  innertopmargin=9pt, innerbottommargin=9pt,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  skipabove=12pt, skipbelow=12pt
+]{theorem}{Theorem}
 
 \theoremstyle{definition}
-\newtheorem{definition}{Definition}
-
-% For the space in definitions
-\makeatletter
-\def\thm@space@setup{%
-  \thm@preskip=1.5em
-  \thm@postskip=1.5em
-}
-\makeatother
+\newmdtheoremenv[
+  backgroundcolor=gray!7, linewidth=0.5pt, linecolor=gray!45,
+  innertopmargin=9pt, innerbottommargin=9pt,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  roundcorner=2pt, skipabove=12pt, skipbelow=12pt
+]{definition}{Definition}
 
 \theoremstyle{remark}
 \newtheorem*{remark}{Note}
+
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+\pushQED{\qed}\normalfont\topsep6\p@\@plus6\p@\relax
+\trivlist\item[\hskip\labelsep\small\itshape #1\@addpunct{.}]\ignorespaces\mbox{}\\
+}{\popQED\endtrivlist\@endpefalse}
+\makeatother
 
 \title{Why Measure Theory}
 \author{Carter Deslauriers}
@@ -594,16 +604,12 @@ Translation invaraince, subadditivity, monotoncity
 
 % PROPERTIES OF OUTER MEASURE
 \begin{theorem}
-
-    1. If $A \subset B$ then $|(A)| \leq |(B)|$
-
-    2. $|[a, b]| = b - a$
-
-    3. If $A1, A2, \ldots$ are sets such that $\bigcup_k A_k = B$, 
-    then $|B| \leq \sum_k |A_k|$
-
-    4. $|A + t| = |A|$
-
+\begin{enumerate}
+  \item If $A \subseteq B$ then $|A| \leq |B|$
+  \item $|[a,b]| = b - a$
+  \item If $A_1, A_2, \ldots$ satisfy $\bigcup_k A_k = B$, then $|B| \leq \sum_k |A_k|$
+  \item $|A + t| = |A|$
+\end{enumerate}
 \end{theorem}
 
 I will now prove each in order.
