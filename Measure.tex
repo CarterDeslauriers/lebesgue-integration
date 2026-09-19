@@ -711,18 +711,53 @@ I will now prove each in order.
 
 
 % TRANSLATION INVARIANCE
-\begin{proof}[Translation Invariance]
+\begin{proof}[Proof: Translation Invariance]
     I would like to show $|A + t| = |A|$.
 
-    First observe that $l((a, b)) = l((a + t, b + t))$ 
-    since $l((a + t, b +t)) = (b + t) - (a + t) = b - a$
+    First observe that 
+    \begin{equation*}
+        l((a, b)) = l((a + t, b + t))
+    \end{equation*}
+    
+    since 
+    \begin{equation*}
+        l((a + t, b +t)) = (b + t) - (a + t) = b - a
+    \end{equation*}
 
-    Now observe that for any open cover of $A$ call it $O_k$, $O_k + T$ covers $A + t$.
-    To see this take a single $y \in A + t$, then $y = x + t$ for some $x \in A$.
-    So $y - t = x$ or $y - t \in A$. (This is wrong pretty sure I'll have to come back later
-    and fix this and finish this section, then Vitalli, then the explaination
-    of why this all connects and why its actually useful, then send it to prof smith, should
-    be done the proofs later or tomorrow.)
+    Now observe that for any open cover of $A$ call it $O_A$, $O_{A+t}$ covers $A$. 
+    
+    Where
+    $O_{A + t}$ is defined as 
+    \begin{equation*}
+        \bigcup_k (O_k + t)
+    \end{equation*}
+    
+    for $O_k \in O_A$. 
+    
+    Take any point in
+    $A + t$ call it y. Then $y = x + t$ for some $x \in A$. Where $x \in O_k$ for some $O_k \in O_A$.
+    Then $y \in O_k + t$. Where 
+    \begin{equation*}
+        l(O_k) = l(O_k + t)
+    \end{equation*}
+
+    Making the set of covers of $A$, call them $S \subset S_t$, where $S_t$ is the set of open
+    covers of $A + t$. 
+    
+    Meaning since $|A| \inf$ over all covers ie $\inf S$ and $S \subset S_t$,
+    it follows $|A + t| \leq |A|$.
+    \begin{remark}
+        Say $B \subset C$ then $\inf C \leq \inf B$; since taking $\inf$ over larger set is smaller. 
+    \end{remark}
+
+    Now consider the sets $A + t + (-t)$ and $A + t$ where the left side is a translations of the right
+    side. Giving 
+    \begin{equation*}
+        |A + t + (-t)| \leq |A + t| \implies |A| \leq |A + t|
+    \end{equation*} 
+
+    Which follows from the above. Completing the proof $|A + t| = |A|$.
+
 \end{proof}
 
 
