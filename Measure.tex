@@ -10,6 +10,8 @@
 \setlength{\jot}{12pt}
 \titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
 \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\paragraph}[display]{\normalsize\bfseries}{}{0pt}{}
+\titlespacing*{\paragraph}{0pt}{12pt}{6pt}
 
 \theoremstyle{plain}
 \newmdtheoremenv[
@@ -362,7 +364,7 @@ Now defining Riemann Integration.
 
     then $f(x)$ is Riemann Integrable with 
     \begin{equation}
-        \int f = U(f) = L(f)
+        \int f \, dx = U(f) = L(f)
     \end{equation}
 \end{definition}
 
@@ -452,7 +454,7 @@ This gives for any $\epsilon > 0$ for some $N \in \mathbb{N}$ whenever $n \geq N
 
 meaning the function is Riemann integrable with
 \begin{equation*}
-    \int_{0}^{1} f_n = L(f_n) = 0
+    \int_{0}^{1} f_n \, dx = L(f_n) = 0
 \end{equation*}
 
 
@@ -561,18 +563,18 @@ Begin by fixing $\epsilon \leq 1$, I will take $\epsilon_0 = \frac{1}{2}$. Choos
 
 Again both $\mathbb{Q}$ and $\mathbb{I}$ dense in $\mathbb{R}$.
 
-First consider $c \in \mathbb{Q} \cap [0, 1]$ then for any $\delta$ chosen there exists some irrational point
+First consider $c \in \mathbb{Q} \, \cap \, [0, 1]$ then for any $\delta$ chosen there exists some irrational point
 \begin{equation}
     x \in (c - \delta, c + \delta) \implies |f(x) - f(c)| = 1 \geq \epsilon_0
 \end{equation}
 
-Consider the case $c \in \mathbb{I} \cap [0, 1]$ then for any $\delta$ chosen there exists some rational point
+Consider the case $c \in \mathbb{I} \, \cap \, [0, 1]$ then for any $\delta$ chosen there exists some rational point
 \begin{equation}
     x \in (c - \delta, c + \delta) \implies |f(x) - f(c)| = 1 \geq \epsilon_0
 \end{equation}
 
 Meaning the set of discontinuous points of $f$ is all of 
-$(\mathbb{Q} \cap [0, 1]) \cup (\mathbb{I} \cap [0, 1]) = [0, 1]$ where $|[0, 1]| = 1$.
+$(\mathbb{Q} \, \cap \, [0, 1]) \cup (\mathbb{I} \, \cap \, [0, 1]) = [0, 1]$ where $|[0, 1]| = 1$.
 \begin{remark}
     I do not prove it here but it is proved in section 2.2
 \end{remark}
@@ -628,12 +630,15 @@ Our understanding lays not in the language of the Riemann integral itself but in
 language of measure.  
 
 We also see that the method by which we partition the domain fails for functions
-that oscillate too quickly and will fail to be defined in spaces outside of $\mathbb{R}$
+that oscillate too quickly and will fail to be defined in spaces outside of $\mathbb{R}$.
 
 
 \subsection{Lebesgue Savior}
 
-
+Under mild assumptions, integrating with respect to measure can gives us
+\begin{equation}
+    \lim_{n \to \infty} \int f_n \, d\mu = 0 = \int f \, d\mu
+\end{equation}
 
 
 
@@ -641,19 +646,19 @@ that oscillate too quickly and will fail to be defined in spaces outside of $\ma
 
 % OUTER MEASURE
 \section{Outer Measure}
+Let $|.|$ denote outer measure.
 
 \begin{definition}[Outer Measure]
-    $|(A)| = \inf \sum_k l(O_k)$ Where $\inf$ is taken over all open coverings such that
+    $|A| = \inf \sum_k l(O_k)$ Where $\inf$ is taken over all open coverings such that
     $A \subset \bigcup_k O_k$
 \end{definition}
 
-\subsection{Agrees eveyrwhere}
-Outer measure agrees with length on open sets and [a, b] = (a, b) in terms of measure.
-Translation invaraince, subadditivity, monotoncity
+\subsection{Properties of Outer Measure}
 
 
 % PROPERTIES OF OUTER MEASURE
 \begin{theorem}
+\mbox{}
 \begin{enumerate}
   \item If $A \subseteq B$ then $|A| \leq |B|$
   \item $|[a,b]| = b - a$
@@ -666,30 +671,41 @@ I will now prove each in order.
 
 % MONOTONCITY
 \begin{proof}[Proof: Monotoncity]
-    For monotonicity (1) first observe that since since 
+    For monotonicity (1) first observe that since 
     \begin{equation*}
-    A \subset B \subset \bigcup_k O_k
+        A \subset B \subset \bigcup_k O_k
     \end{equation*}
 
     any open covering of $B$ is an open covering of $A$.
 
-    Now outer measure is defined as $\inf$ over all open coverings. Therefore there exists an
-    open covering $\bigcup_k O_k$, such that 
+    Let 
     \begin{equation*}
-        \bigcup_k l(O_k) < |B| + \epsilon
+        S_a = \left\{ \sum_k l(O_k): O \text{ is an open cover of } A \right\}
     \end{equation*}
-    Since any open covering
-    of $B$ is an open covering of $A$ 
+    Where each $O$ is an open cover of the form $\bigcup_k O_k$.
+
+    Similarly let
     \begin{equation*}
-        |A| \leq \sum_k l(O_k) < |B| + \epsilon
-    \end{equation*} 
-    Where $\epsilon$ is arbitrary $> 0$. Meaning $|A| \leq |B|$
+        S_b = \left\{ \sum_k l(O_k): O \text{ is an open cover of } B \right\}
+    \end{equation*}
+
+    $S_b \subset S_a$ since any open covering of $B$ is an open covering of $A$.
+    It then follows $\inf S_a \leq \inf S_b$.
+
+    Giving $|A| \leq |B|$.
+
+    \begin{remark}
+        Say $B \subset C$ then $\inf C \leq \inf B$; since any lower bound of $C$ is
+        a lower bound of $B$, making $\inf C$ a lower bound of $B$, where
+        $\inf B$ is greatest lower bound giving $\inf C \leq \inf B$.
+    \end{remark}
 \end{proof}
+
 
 % AGREEMENT ON [a, b]
 \begin{proof}[Proof: $\lvert [a, b{]}\rvert = b - a$]
-    For the second property of outer measure consider the open cover 
-    for $[a, b]$ 
+    For the second property of outer measure begin by considering the open cover
+    for $[a, b]$
     \begin{equation*}
         (a - \epsilon, a + \epsilon) \cup (a, b) \cup (b - \epsilon, b + \epsilon)
     \end{equation*}
@@ -730,8 +746,6 @@ I will now prove each in order.
         \sum_{k=1}^{n} l(O_k) \leq \sum_{k=1}^{\infty} l(O_k)
     \end{equation*}
     Since length is non negative. 
-    
-    Suppose the claim holds for $n$ intervals.
 
     Begin with $n=1$ intervals. Any interval containing $[a, b]$ ie
     $[a, b] \subset O_k$ has length $l(O_k) \geq b - a$,
@@ -739,13 +753,16 @@ I will now prove each in order.
     \begin{equation*}
         (a, b) \subset [a, b] \subset O_k
     \end{equation*}
+
+    Suppose the claim holds for $n$ intervals.
     
     Now consider $n+1$ intervals covering $[a, b]$. 
     
     $b$ must be contained
-    in at least one of these intervals call it $(c, d)$. If $c < a$ then $l(c, d) >= b - a$
-    so consider $a < c < b < d$; since $(c, d)$ covers none of $[a, c]$ we can invoke
-    the inductive hypothesis 
+    in at least one of these intervals, call that interval $(c, d)$. 
+    If $c < a$ then $l(c, d) \geq b - a$.
+    So consider $a < c < b < d$. Since $(c, d)$ covers none of $[a, c]$ we can invoke
+    the inductive hypothesis on $[a, c]$ giving
     \begin{equation*}
         \sum_{k=1}^{n} l(O_k) \geq c - a
     \end{equation*} 
