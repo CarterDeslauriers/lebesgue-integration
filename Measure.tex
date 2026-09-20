@@ -407,7 +407,7 @@ Let $f_n(x)$ be a series of functions defined on $[0, 1]$ of the form
 
 
 % UPPER AND LOWER SUMS
-\subsubsection{Riemann's Sums}
+\subsubsection{Riemann Integration}
 I want to show each $f_n$ is Riemann integrable. From the definition I must show
 \begin{equation*}
     U(f_n, P_n) - L(f_n, P_n) < \epsilon
@@ -427,7 +427,7 @@ The total number of intervals in which there may exist rational numbers is 2n;
 since there are n rationals where each can be in at most 2 intervals at once.
 
 \begin{remark}
-    if $r_k = x_k$ for instance then $[x_{k-1}, x_k]$ and $[x_k, x_{k+1}]$ both contains $r_k$
+    if $r_k = x_k$ for instance, then $[x_{k-1}, x_k]$ and $[x_k, x_{k+1}]$ both contains $r_k$
 \end{remark}
 
 
@@ -447,7 +447,7 @@ This gives
     U(f_n, P_n) = (\frac{\epsilon}{4n})(2n)(1) + (1)(0) = \frac{\epsilon}{2}
 \end{equation*}
 
-For the lower sums since $\mathbb{I}$ is dense in $\mathbb{R}$, 
+For the lower sums, since $\mathbb{I}$ is dense in $\mathbb{R}$, 
 between any two real numbers there exists an irrational.
 
 Meaning on any interval $[x_{k-1}, x_k]$, $\inf_{[x_{k-1}, x_k]} f = 0$.
@@ -483,7 +483,7 @@ Call this function $f$.
 Now both $\mathbb{Q}$ dense in $\mathbb{R}$
 as well as $\mathbb{I}$ dense in $\mathbb{R}$.
 
-Meaning for any partition $P$, on any interval $[x_{k-1}, x_k] \in P$
+Meaning for any partition $P$, on any interval $[x_{k-1}, x_k] \subset [0, 1]$
 there exists both a rational and irrational.
 
 This gives $\inf_{[x_{k-1}, x_k]} f = 0$ and $\sup_{[x_k - x_{k-1}]} f = 1$ on every interval.
@@ -586,7 +586,7 @@ Consider the case $c \in \mathbb{I} \, \cap \, [0, 1]$ then for any $\delta$ cho
 Meaning the set of discontinuous points of $f$ is all of 
 $(\mathbb{Q} \, \cap \, [0, 1]) \cup (\mathbb{I} \, \cap \, [0, 1]) = [0, 1]$ where $|[0, 1]| = 1$.
 \begin{remark}
-    I do not prove it here but it is proved in section 2.2
+    I do not prove it here but it is proved in section 2.1
 \end{remark}
 
 % f_n DISCONTINUOUS
@@ -635,7 +635,7 @@ giving
 
 making $D_n$ measure 0 by definition.
 
-We know understand why each $f_n$ integrates but $f$ itself fails to integrate.
+We now understand why each $f_n$ integrates but $f$ itself fails to integrate.
 Our understanding lays not in the language of the Riemann integral itself but instead in the
 language of measure.  
 
@@ -707,7 +707,7 @@ I will now prove each in order.
     \begin{remark}
         Say $B \subset C$ then $\inf C \leq \inf B$; since any lower bound of $C$ is
         a lower bound of $B$, making $\inf C$ a lower bound of $B$, where
-        $\inf B$ is greatest lower bound giving $\inf C \leq \inf B$.
+        $\inf B$ is greatest lower bound.
     \end{remark}
 \end{proof}
 
@@ -923,7 +923,7 @@ To be an equivalence relation it must satisfy the following properties
 \begin{proof}[Proof: Equivalence Relation]
     For $x \sim s$, notice for any value $x$, $x - x = 0$ and $0 \in \mathbb{Q}$.
 
-    For $x \sim y implies y \sim x$, notice that $y - x = -1(x - y)$ where $\mathbb{Q}$ is close under
+    For $x \sim y \implies y \sim x$, notice that $y - x = -1(x - y)$ where $\mathbb{Q}$ is close under
     multiplication.
 
     For $x \sim y$ and $y \sim z$, then $x \sim z$, notice $(x - y) + (y - z) = (x - z)$
@@ -948,7 +948,11 @@ For arbitrary $x \in A$ and $y \in B$, $x - z \in \mathbb{Q}$ and
 $y - z \in \mathbb{Q}$ . Let $x - z = u$ and $y - z = v$.
 
 Solving for $x$ and $y$ gives $x = u - z$ and $y = v - z$. Now subtracting $x - y$, we get
-$x - y = (u + z) - (v + z) = u - v$. But $u, v \in \mathbb{Q}$, where $\mathbb{Q}$ is closed
+\begin{equation*}
+    x - y = (u - z) - (v - z) = u - v
+\end{equation*}
+
+But $u, v \in \mathbb{Q}$, where $\mathbb{Q}$ is closed
 under subtraction, giving $x - y \in \mathbb{Q}$. Which says $x \sim y$. 
 
 Taking any $x \in A$ gives $x \sim y$ for some $y \in B$ forcing $x \in B$. Making
@@ -961,32 +965,82 @@ Therefore any two equivalence classes on $[0, 1]$ are disjoint.
 % VITALLI
 \subsubsection{Vitalli}
 
-Let V contain a single element from each equivalence class. There exists uncountably many
-of these classes in which we have no way of choosing, but where we can
-still choose and element from each from the Axiom of Choice.
+For the following argument I will use the Axiom of Choice to show that, countable additivity
+does not necessarily hold for all subsets of $\mathbb{R}$.
 
-Now for every $q \in [-1, 1] \cap \mathbb{Q}$ the sets $V + q$ are disjoint. To see
-this suppose some element $w$ existed such that $w \in (V + p) \cap (V + q)$ for
-$p, q \in \mathbb{Q} \cap [0, 1]$. Then $w = v + p$ for some $v \in V$ and 
-$w = u + q$ for some $u \in V$. So $v - w = p - q$ making $v - u \in \mathbb{Q}$ meaning
-$v \sim u$ but $V$ only contains one element from each equivalence class meaning $v = u$
+% AXIOM OF CHOICE
+\begin{axiom}
+    For any collection of nonempty sets, there exists a function assigning to each
+    set one of its elements.
+\end{axiom}
+
+To begin, let a set $V$ contain a single element from each equivalence class on $[0, 1]$. 
+The equivalence classes on the interval $[0, 1]$ are of the form $(\mathbb{Q} + x) \cap [0, 1]$.
+Making $V$ uncountable.
+
+Now consider the translations $V + q$ for $q \in [-1, 1] \cap \mathbb{Q}$. 
+
+\begin{lemma}
+    For any $p, q \in [-1, 1] \cap \mathbb{Q}$, the sets $V + p$ and $V + q$ are disjoint.
+\end{lemma}
+
+
+% TRANSLATED CLASSES
+\begin{proof}[Proof: Translated Classes Disjoint]
+To see this suppose some element $w$ existed such that 
+\begin{equation*}
+    w \in (V + p) \cap (V + q)
+\end{equation*}
+for $p, q \in \mathbb{Q} \cap [0, 1]$. 
+
+Then $w = v + p$ for some $v \in V$ and 
+$w = u + q$ for some $u \in V$. So 
+\begin{equation*}
+    v - w = p - q
+\end{equation*}
+making $v - u \in \mathbb{Q}$.
+
+Meaning $v \sim u$, but $V$ only contains one element from each equivalence class meaning $v = u$
 forcing $p = q$. But that says the translated classes are the same, meaning each
 translated class must be disjoint.
+\end{proof}
 
-Now 
-\begin{equation}
-    [0, 1] \subset \bigcup_q (V + q) \subset [-1, 2]
-\end{equation}
+Now I will show that the translated classes are bounded in measure but infinite summations of
+values; a contradiction.
 
-Take any arbitrary $x \in [0, 1]$,
-$x$ sits in some equivalence class where $V$ contains some representative from that class.
-Giving $x - v \in \mathbb{Q}$. Since $x, v \in [0, 1] \implies x - v \in [-1, 1] \cap \mathbb{Q}$.
-Where every $q \in [-1, 1]$ is used. Now take an arbitrary $v + q$ simply
-$v \in [0, 1]$ and $q \in [-1, 1]$ forcing $v + q \in [-1, 2]$. 
+\begin{lemma}[Vitalli Bounded]
+    $[0, 1] \subset \bigcup_q (V + q) \subset [-1, 2]$
+\end{lemma}
+
+\begin{proof}[Proof: Vitalli Bounded]
+Take any arbitrary $x \in [0, 1]$.
+
+$x$ sits in some equivalence class since $V$ contains some representative from that class.
+
+Meaning $x - v = q$ for some $q \in \mathbb{Q}$ and some $v \in V$. 
+
+Since both $x, v \in [0, 1]$ it implies that $q \in [-1, 1] \cap \mathbb{Q}$.
+Since $\bigcup_q (V + q)$ is a union over all $q \in [-1, 1] \cap \mathbb{Q}$, we have
+
+\begin{equation*}
+    [0, 1] \subset \bigcup_q (V + q)
+\end{equation*}
+
+Now take an arbitrary $v \in V$ and $q \in [-1, 1] \cap \mathbb{Q}$.
+$v \in [0, 1]$ and $q \in [-1, 1]$ forcing $v + q \in [-1, 2]$.
+
+Meaning
+
+\begin{equation*}
+    \bigcup_q (V + q) \subset [-1, 2]
+\end{equation*}
+
+Completing the proof.
+\end{proof}
 
 Now by monotonicity it must be the case that
 \begin{equation}
-    |[0, 1]| \leq |\bigcup_q (V + q)| \leq [-1, 2]
+    |[0, 1]| \leq |\bigcup_q (V + q)| \leq |[-1, 2]|
 \end{equation}
 
 Which implies
@@ -1012,18 +1066,18 @@ $\sum_q |(V + q)| = \infty$.
 
 Suppose then that $|(V + q)| = 0$, it would then force $\sum_q |(V + q)| = 0$.
 
-But measure is non negative meaning $|(V + q)| \geq 0$ but ether gives a contradiction to
+Measure is non negative meaning $|(V + q)| \geq 0$, but either gives a contradiction to
 \begin{equation}
     1 \leq |\bigcup_q (V + q)| \leq 3
 \end{equation}
 
-Meaning for the vitalli set, (a valid subset of R implying the axiom of choice)
+Meaning for the vitalli set, (a valid subset of R from the Axiom of Choice)
 \begin{equation}
     |\bigcup_k A_k| = \sum_k |A_k|
 \end{equation}
 does not hold.
 
-Meaning it is not true in general and there we can not assert that
+Meaning it is not true in general and therefore we can not assert that
 \begin{equation}
     |\bigcup_k A_k| = \sum_k |A_k|
 \end{equation}
@@ -1031,12 +1085,72 @@ Meaning it is not true in general and there we can not assert that
 This as you will see later actually implies that outer measure is not a valid measure on
 all subsets of R.
 
+
+% INTEGRATION ON MEASURE
 \section{Integration on Measure}
-We can now generalize to any space (x, S, mew) and we have measure which splits based on output
-and reverse maps to inputs where we get the the measure of those sets times the inf of the
-function on the sets, which we can then use for probability where we know for certain our methods
-are coherent.
+
+First I will define a what it means to be a measure and where exactly
+measures are defined.
+
+Before that I will define a $\sigma$-algebra and measurable space.
+
+% SIMGA ALGEBRA
+\begin{definition}[$\sigma$-algebra]
+    A $\sigma$-algebra on a set $X$ is a set of subset of $X$ satisfying the
+    following three properties.
+
+    \begin{enumerate}
+        \item $\null \in S$
+        \item for any set $E \in S$, $X \ E \in S$
+        \item for any sequence of sets $E_1, E_2, \ldots$ where each $E_k \in S$, $\bigcup_k E_k \in S$
+    \end{enumerate}
+\end{definition}
+
+We can quickly derive $X \in S$. First observe
+$X \ E$ is $\{x \in X: x \not\in E\}$. Then from the first two properties $X \in S$.
 
 
+It follows from De Morgan's laws that for any $E_1, E_2, \ldots$ 
+where each $E_k \in S$, $\bigcap_k E_k \in S$.
+
+\begin{align*}
+    E_k \in S &\implies E_k^{c} \in S \\
+    &\implies \bigcup_k E_k^{c} \in S \\
+    &\implies (\bigcup_k E_k^{c})^{c} \in S \\
+    &\implies \bigcap_k E_k \in S
+\end{align*}
+
+Where the last line follows from
+\begin{align*}
+    (\bigcup_k E_k^{c}) &= (\bigcap_k E_k)^{c} \\
+    &\implies (\bigcup_k E_k^{c})^{c} = ((\bigcap_k E_k)^{c})^{c} \\
+    &\implies (\bigcup_k E_k^{c})^{c} = \bigcap_k E_k
+\end{align*}
+
+\begin{remark}
+    Notice that $S$ is defined specifically such that it contains the sets for which
+    we later want to apply countable additivity too.
+\end{remark}
+
+
+% MEASURE SPACE
+I will now define a measure space.
+
+\begin{definition}[Measure Space]
+    A measure space a set $X$ and a $\sigma$-algebra defined on the set $X$ denoted as
+    $(X , S)$.
+\end{definition}
+
+
+% MEASURE DEFINITION
+Now to define a measure and a measure space.
+
+\begin{definition}[Measure Space]
+    Let $(X, S)$ be a measurable a space. $\mu$ is a measure on the measure space denoted
+    by $(X, S, \mu)$ if $\mu(\null) = 0$, and $\mu(\bigcup_k E_k) = \sum_k \mu(E_k)$ for disjoint
+    $E_k$ where each $E_k$ in $S$. 
+\end{definition}
+
+Now we can define integration with respect to measure and prove our result from earlier.
 
 \end{document}
