@@ -946,6 +946,7 @@ Suppose for contradiction the intersection of two equivalence classes was non em
 Let there be some element in $A$ call it $z$ and the same element in $B$. 
 For arbitrary $x \in A$ and $y \in B$, $x - z \in \mathbb{Q}$ and
 $y - z \in \mathbb{Q}$ . Let $x - z = u$ and $y - z = v$.
+\end{proof}
 
 Solving for $x$ and $y$ gives $x = u - z$ and $y = v - z$. Now subtracting $x - y$, we get
 \begin{equation*}
@@ -1152,5 +1153,79 @@ Now to define a measure and a measure space.
 \end{definition}
 
 Now we can define integration with respect to measure and prove our result from earlier.
+First again I will define partitions and lower sums.
+
+% S-PARITITONS
+\begin{definition}[$S$-Parititions]
+    Let $(X, S, \mu)$ be a measure space, then $P$ an $S$-Partitions is defined as
+    \begin{equation}
+        P = \{E_1, E_2, \ldots, E_n\}
+    \end{equation}
+
+    Where each $E_k$ are disjoint, $E_k \in S$ and $\bigcup_k^{n} = X$.
+\end{definition}
+
+\begin{remark}
+    Notice again $P$ contains finite sets.
+\end{remark}
+
+%S-MEASRUABLE F
+\begin{definition}[S-Measurable]
+    Let $(X, S, \mu)$ be a measurable space. A function $f$ is $S$-measurable
+    if $f^{-1}((a, \infty)) \in S$ for every real number $a$. 
+\end{definition}
+
+
+% LOWER SUMS
+\begin{definition}[Lower sums]
+    Let $(X, S, \mu)$ be a measure space.
+
+    Let $f$ be an $S$-measurable function $f \colon X \to [0, \infty]$, the lower sums of
+    $f$ for a $S$-Partition $P$ are defined as
+    \begin{equation*}
+        L(f, P) = \sum_{k=1}^{n} \mu(E_k) \inf_{E_k} f
+    \end{equation*} 
+\end{definition}
+
+Now finally integration with respect to measure.
+
+% LEBESEGUE MEASURE
+\begin{definition}[Lebesgue Measure]
+    Let $(X, S, \mu)$ be a measure space.
+    \begin{equation}
+        \int f \, d\mu = \sup_{P} L(f, P)
+    \end{equation}
+\end{definition}
+
+
+Finally taking our function from from earlier
+\begin{equation*}
+    f = \lim_{n \to \infty} f_n = \begin{cases}
+                        1: & x \in \mathbb{Q} \cap [0, 1] \\
+                        0: & x \not\in \mathbb{Q} \cap [0, 1]
+                        \end{cases}
+\end{equation*}
+
+and the $S$-Partition 
+\begin{equation*}
+    \{[0, 1]\, \cap \, \mathbb{Q}, [0, 1] \setminus \mathbb{Q}\}
+\end{equation*}
+
+gives us
+\begin{equation}
+    \int f \, d\mu = (0)(1) + (1)(0)
+\end{equation}
+
+Where from left to right we have, measure 0 times height 1 plus6
+measure 1 times height 0.
+
+\section{Conclusion}
+
+
+
+
+
+
+
 
 \end{document}
