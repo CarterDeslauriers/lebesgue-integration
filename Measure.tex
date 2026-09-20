@@ -29,6 +29,16 @@
   roundcorner=2pt, skipabove=12pt, skipbelow=12pt
 ]{definition}{Definition}
 
+\newmdtheoremenv[
+  linewidth=1pt, linecolor=black,
+  innertopmargin=9pt, innerbottommargin=9pt,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  skipabove=12pt, skipbelow=12pt
+]{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem*{axiom}{Axiom}
+
 \theoremstyle{remark}
 \newtheorem*{remark}{Note}
 
@@ -790,25 +800,25 @@ I will now prove each in order.
     \end{equation*}
 
     Since outer measure is $\inf$ over all open covers, take for each $A_k$ the open cover
+    $O_k = \bigcup_i O_{ki}$ where
     \begin{equation*}
-        O_k < |A_k| + \frac{\epsilon}{2^{k+1}}
+        \sum_i l(O_{ki}) < |A_k| + \frac{\epsilon}{2^{k+1}}
     \end{equation*}
 
-    Now since the $O_k$ cover $A$
+    Now since the $O_k$ cover each $A_k$ and $A = \bigcup_k A_k$
     \begin{equation*}
         A \subset \bigcup_k O_k
     \end{equation*}
 
-    giving
+    Meaning
     \begin{align*}
-        |A| &\leq |\bigcup_k O_k| \\
-        &= \sum_k |O_k| \\
-        &= \sum_k \frac{\epsilon}{2^{k+1}} \\
-        &= \frac{\epsilon}{2}
+        |A| &\leq \sum_k \sum_i l(O_{ki}) \\
+        &< \sum_k |A_k| + \frac{\epsilon}{2^{k+1}} \\
+        &= \sum_k |A_k| + \frac{\epsilon}{2} \\
     \end{align*}
 
-    Since this is true for any arbitary $\epsilon$ and $A$ is $\inf$ over all coverings
-    we get 
+    Which holds for all $\epsilon > 0$ giving
+
     \begin{equation*}
         |\bigcup_k A_k| \leq \sum_k |A_k|
     \end{equation*}
@@ -832,7 +842,7 @@ I will now prove each in order.
         l((a + t, b +t)) = (b + t) - (a + t) = b - a
     \end{equation*}
 
-    Now observe that for any open cover of $A$ call it $O_A$, $O_{A+t}$ covers $A$. 
+    Now observe that for any open cover of $A$ call it $O_A$, $O_{A+t}$ covers $A + t$. 
     
     Where
     $O_{A + t}$ is defined as 
@@ -849,14 +859,21 @@ I will now prove each in order.
         l(O_k) = l(O_k + t)
     \end{equation*}
 
-    Making the set of covers of $A$, call them $S \subset S_t$, where $S_t$ is the set of open
-    covers of $A + t$. 
-    
-    Meaning since $|A| \inf$ over all covers ie $\inf S$ and $S \subset S_t$,
+    Making the set of covers of $A$ is a subset of the set of covers of $A + t$.
+
+    Let 
+    \begin{equation*}
+        S_A = \left\{ \sum_k l(O_k): O \text{ is an open cover of } A \right\}
+    \end{equation*}
+    Where each $O$ is an open cover of the form $\bigcup_k O_k$.
+
+    Similarly let
+    \begin{equation*}
+        S_{A + t} = \left\{ \sum_k l(O_k): O \text{ is an open cover of } A + t \right\}
+    \end{equation*}
+
+    Meaning since $|A| \inf$ over all covers ie $\inf S_A$ and $S_A \subset S_{A + t}$,
     it follows $|A + t| \leq |A|$.
-    \begin{remark}
-        Say $B \subset C$ then $\inf C \leq \inf B$; since taking $\inf$ over larger set is smaller. 
-    \end{remark}
 
     Now consider the sets $A + t + (-t)$ and $A + t$ where the left side is a translations of the right
     side. Giving 
@@ -869,13 +886,19 @@ I will now prove each in order.
 \end{proof}
 
 
-It seems that outer measure has all the desired properties we would want or need. But
-we would want to see that in general for disjoint sets
+It seems that outer measure has all the desired properties we would want or need. The problem
+comes when we want to integrate with respect to measure. We would like to break
+up the set we are integrating over into disjoint sets whose union is the set itself. Therefore
+we would additionally want to see.
+
 \begin{equation}
     |\bigcup_k A_k| = \sum_k |A_k|
 \end{equation}
 
-But as we will see in a moment this is not always the case. 
+Which is not much different then our property of sub-additivity. This may seem
+intuitively true at first, but as we will see in a moment this is not actually true for
+all sets. Therefore we would like to be explicit about where and when the
+properties holds to be coherent in our application of measure theory.
 
 
 
@@ -884,43 +907,55 @@ But as we will see in a moment this is not always the case.
 
 % EQUIVALENCE CLASSES
 \subsubsection{Equivalence Classes}
-\begin{definition}[Equavalince Relation]
+\begin{definition}[Equivalence Relation]
     x is said to be equivalent to y denoted by $x \sim y$ iff $x - y \in \mathbb{Q}$
 \end{definition}
 
 
-To be an eqvaaulence relation it must satisfy $x \sim x$, if $x \sim y$
-then $y \sim x$, and if $x \sim y$ and $y \sim z$ then $x \sim z$. 
+To be an equivalence relation it must satisfy the following properties
+\begin{enumerate}
+    \item $x \sim x$
+    \item If $x \sim y$ then $y \sim x$
+    \item If $x \sim y$ and $y \sim z$ then $x \sim z$.
+\end{enumerate}
 
 
-\begin{proof}[Proof: Equavalice Relation]
-    For the first, notice for any value $x$, $x - x = 0$ and $0 \in \mathbb{Q}$.
+\begin{proof}[Proof: Equivalence Relation]
+    For $x \sim s$, notice for any value $x$, $x - x = 0$ and $0 \in \mathbb{Q}$.
 
-    For the second, notice that $y - x = -1(x - y)$ where $\mathbb{Q}$ is close under
+    For $x \sim y implies y \sim x$, notice that $y - x = -1(x - y)$ where $\mathbb{Q}$ is close under
     multiplication.
 
-    For the third, notice $(x - y) + (y - z) = (x - z)$ where $\mathbb{Q}$ is closed under
-    addition.
+    For $x \sim y$ and $y \sim z$, then $x \sim z$, notice $(x - y) + (y - z) = (x - z)$
+    where $\mathbb{Q}$ is closed under addition.
 \end{proof}
 
 
-\begin{definition}[Equavalence Class on [0, 1]]
-    An equvalence class on $[0, 1]$ is a set of all equivalent elements ${y: y \sim x}$ 
+\begin{definition}[Equivalence Class on $[0, 1{]}$]
+    An equivalence class on $[0, 1]$ is a set of all equivalent elements $\{y: y \sim x\}$
     for all $x \in [0, 1]$
 \end{definition}
 
+\begin{lemma}
+    Any two equivalence classes on $[0, 1]$ are disjoint.
+\end{lemma}
 
-Now any two equivalence classes on $[0, 1]$ are disjoint. To see this
-suppose the intersection of two equivalence classes was non empty. So let there be some element
-in $A$ call it $z$ and the same element in $B$. By definition $x - z \in \mathbb{Q}$ and
-$y - z \in \mathbb{Q}$ for arbitrary $x \in A$ and $y \in B$. Let $x - z = u$ and $y - z = v$. 
-Solving for $x$ and $y$ gives $x = u - z$ and $y = v - z$. Now if we subtract $x - y$, we get
-$x - y = (u + z) - (v + z) = u - v$. But $u, v \in \mathbb{Q}$ where $\mathbb{Q}$ is closed
-under subtraction giving $x - y \in \mathbb{Q}$, but that says $x \sim y$. 
+\begin{proof}[Proof: Equivalence Classes Disjoint]
+Suppose for contradiction the intersection of two equivalence classes was non empty.
 
-Then taking any $x \in A$ gives $x \sim y$ for some $y \in B$ forcing $x \in B$. Making
+Let there be some element in $A$ call it $z$ and the same element in $B$. 
+For arbitrary $x \in A$ and $y \in B$, $x - z \in \mathbb{Q}$ and
+$y - z \in \mathbb{Q}$ . Let $x - z = u$ and $y - z = v$.
+
+Solving for $x$ and $y$ gives $x = u - z$ and $y = v - z$. Now subtracting $x - y$, we get
+$x - y = (u + z) - (v + z) = u - v$. But $u, v \in \mathbb{Q}$, where $\mathbb{Q}$ is closed
+under subtraction, giving $x - y \in \mathbb{Q}$. Which says $x \sim y$. 
+
+Taking any $x \in A$ gives $x \sim y$ for some $y \in B$ forcing $x \in B$. Making
 $A \subset B$. Similarly taking any $y \in B$ gives $y \sim x$ for some $x \in A$. Making
-$B \subset A$ or $A = B$. Therefore any two equivalence classes on $[0, 1]$ are disjoint.
+$B \subset A$ or $A = B$. 
+
+Therefore any two equivalence classes on $[0, 1]$ are disjoint.
 
 
 % VITALLI
