@@ -802,12 +802,132 @@ I will now prove each in order.
 \end{proof}
 
 
-\subsection{Failure of Outer Measure as a Measure}
-Actually doesnt give us countable additiivty of disjoint sets though if we consdier the vitali set.
-This comes from axiom of choice and we want sigma algebras to be closed under complimentation,
-coutnable union -> countble intersection from de morgan, and contain null and the set itself,
-because then we can use all of our operations and write proof that are completely consistent
+It seems that outer measure has all the desired properties we would want or need. But
+we would want to see that in general for disjoint sets
+\begin{equation}
+    |\bigcup_k A_k| = \sum_k |A_k|
+\end{equation}
 
+But as we will see in a moment this is not always the case. 
+
+
+
+% OUTER MEASURE FAILS
+\subsection{Failure of Outer Measure as a Measure}
+
+% EQUIVALENCE CLASSES
+\subsubsection{Equivalence Classes}
+\begin{definition}[Equavalince Relation]
+    x is said to be equivalent to y denoted by $x \sim y$ iff $x - y \in \mathbb{Q}$
+\end{definition}
+
+
+To be an eqvaaulence relation it must satisfy $x \sim x$, if $x \sim y$
+then $y \sim x$, and if $x \sim y$ and $y \sim z$ then $x \sim z$. 
+
+
+\begin{proof}[Proof: Equavalice Relation]
+    For the first, notice for any value $x$, $x - x = 0$ and $0 \in \mathbb{Q}$.
+
+    For the second, notice that $y - x = -1(x - y)$ where $\mathbb{Q}$ is close under
+    multiplication.
+
+    For the third, notice $(x - y) + (y - z) = (x - z)$ where $\mathbb{Q}$ is closed under
+    addition.
+\end{proof}
+
+
+\begin{definition}[Equavalence Class on [0, 1]]
+    An equvalence class on $[0, 1]$ is a set of all equivalent elements ${y: y \sim x}$ 
+    for all $x \in [0, 1]$
+\end{definition}
+
+
+Now any two equivalence classes on $[0, 1]$ are disjoint. To see this
+suppose the intersection of two equivalence classes was non empty. So let there be some element
+in $A$ call it $z$ and the same element in $B$. By definition $x - z \in \mathbb{Q}$ and
+$y - z \in \mathbb{Q}$ for arbitrary $x \in A$ and $y \in B$. Let $x - z = u$ and $y - z = v$. 
+Solving for $x$ and $y$ gives $x = u - z$ and $y = v - z$. Now if we subtract $x - y$, we get
+$x - y = (u + z) - (v + z) = u - v$. But $u, v \in \mathbb{Q}$ where $\mathbb{Q}$ is closed
+under subtraction giving $x - y \in \mathbb{Q}$, but that says $x \sim y$. 
+
+Then taking any $x \in A$ gives $x \sim y$ for some $y \in B$ forcing $x \in B$. Making
+$A \subset B$. Similarly taking any $y \in B$ gives $y \sim x$ for some $x \in A$. Making
+$B \subset A$ or $A = B$. Therefore any two equivalence classes on $[0, 1]$ are disjoint.
+
+
+% VITALLI
+\subsubsection{Vitalli}
+
+Let V contain a single element from each equivalence class. There exists uncountably many
+of these classes in which we have no way of choosing, but where we can
+still choose and element from each from the Axiom of Choice.
+
+Now for every $q \in [-1, 1] \cap \mathbb{Q}$ the sets $V + q$ are disjoint. To see
+this suppose some element $w$ existed such that $w \in (V + p) \cap (V + q)$ for
+$p, q \in \mathbb{Q} \cap [0, 1]$. Then $w = v + p$ for some $v \in V$ and 
+$w = u + q$ for some $u \in V$. So $v - w = p - q$ making $v - u \in \mathbb{Q}$ meaning
+$v \sim u$ but $V$ only contains one element from each equivalence class meaning $v = u$
+forcing $p = q$. But that says the translated classes are the same, meaning each
+translated class must be disjoint.
+
+Now 
+\begin{equation}
+    [0, 1] \subset \bigcup_q (V + q) \subset [-1, 2]
+\end{equation}
+
+Take any arbitrary $x \in [0, 1]$,
+$x$ sits in some equivalence class where $V$ contains some representative from that class.
+Giving $x - v \in \mathbb{Q}$. Since $x, v \in [0, 1] \implies x - v \in [-1, 1] \cap \mathbb{Q}$.
+Where every $q \in [-1, 1]$ is used. Now take an arbitrary $v + q$ simply
+$v \in [0, 1]$ and $q \in [-1, 1]$ forcing $v + q \in [-1, 2]$. 
+
+Now by monotonicity it must be the case that
+\begin{equation}
+    |[0, 1]| \leq |\bigcup_q (V + q)| \leq [-1, 2]
+\end{equation}
+
+Which implies
+\begin{equation}
+    1 \leq |\bigcup_q (V + q)| \leq 3
+\end{equation}
+
+Since each $V + q$ consists of exactly the same amount of elements
+$|V + q| = |V + p|$.
+
+Now suppose it is true for disjoint sets
+\begin{equation}
+    |\bigcup_k A_k| = \sum_k |A_k|
+\end{equation}
+
+then
+\begin{equation}
+    |\bigcup_q (V + q)| = \sum_q |(V + q)|
+\end{equation}
+
+Suppose that $|(V + q)| > 0$, since there are an infinite amount of $q \in [-1, 1]$ it would force
+$\sum_q |(V + q)| = \infty$. 
+
+Suppose then that $|(V + q)| = 0$, it would then force $\sum_q |(V + q)| = 0$.
+
+But measure is non negative meaning $|(V + q)| \geq 0$ but ether gives a contradiction to
+\begin{equation}
+    1 \leq |\bigcup_q (V + q)| \leq 3
+\end{equation}
+
+Meaning for the vitalli set, (a valid subset of R implying the axiom of choice)
+\begin{equation}
+    |\bigcup_k A_k| = \sum_k |A_k|
+\end{equation}
+does not hold.
+
+Meaning it is not true in general and there we can not assert that
+\begin{equation}
+    |\bigcup_k A_k| = \sum_k |A_k|
+\end{equation}
+
+This as you will see later actually implies that outer measure is not a valid measure on
+all subsets of R.
 
 \section{Integration on Measure}
 We can now generalize to any space (x, S, mew) and we have measure which splits based on output
