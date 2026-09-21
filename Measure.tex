@@ -1090,14 +1090,14 @@ all subsets of R.
 % INTEGRATION ON MEASURE
 \section{Integration on Measure}
 
-First I will define a what it means to be a measure and where exactly
+First I will define what it means to be a measure and where exactly
 measures are defined.
 
 Before that I will define a $\sigma$-algebra and measurable space.
 
 % SIMGA ALGEBRA
 \begin{definition}[$\sigma$-algebra]
-    A $\sigma$-algebra on a set $X$ is a set of subset of $X$ satisfying the
+    A $\sigma$-algebra on a set $X$ is a set of subsets of $X$ satisfying the
     following three properties.
 
     \begin{enumerate}
@@ -1107,11 +1107,10 @@ Before that I will define a $\sigma$-algebra and measurable space.
     \end{enumerate}
 \end{definition}
 
-We can quickly derive $X \in S$. First observe
+From the properties we can quickly derive $X \in S$. First observe
 $X \ E$ is $\{x \in X: x \not\in E\}$. Then from the first two properties $X \in S$.
 
-
-It follows from De Morgan's laws that for any $E_1, E_2, \ldots$ 
+Additionally it follows from De Morgan's laws that for any $E_1, E_2, \ldots$ 
 where each $E_k \in S$, $\bigcap_k E_k \in S$.
 
 \begin{align*}
@@ -1138,8 +1137,8 @@ Where the last line follows from
 I will now define a measure space.
 
 \begin{definition}[Measure Space]
-    A measure space a set $X$ and a $\sigma$-algebra defined on the set $X$ denoted as
-    $(X , S)$.
+    A measure space is defined as a set $X$ and a $\sigma$-algebra 
+    defined on the set $X$ denoted by $(X , S)$.
 \end{definition}
 
 
@@ -1147,8 +1146,8 @@ I will now define a measure space.
 Now to define a measure and a measure space.
 
 \begin{definition}[Measure Space]
-    Let $(X, S)$ be a measurable a space. $\mu$ is a measure on the measure space denoted
-    by $(X, S, \mu)$ if $\mu(\null) = 0$, and $\mu(\bigcup_k E_k) = \sum_k \mu(E_k)$ for disjoint
+    Let $(X, S)$ be a measurable space. $\mu$ is a measure on the measure space, denoted
+    by $(X, S, \mu)$, if $\mu(\null) = 0$, and $\mu(\bigcup_k E_k) = \sum_k \mu(E_k)$ for disjoint
     $E_k$ where each $E_k$ in $S$. 
 \end{definition}
 
@@ -1162,7 +1161,7 @@ First again I will define partitions and lower sums.
         P = \{E_1, E_2, \ldots, E_n\}
     \end{equation}
 
-    Where each $E_k$ are disjoint, $E_k \in S$ and $\bigcup_k^{n} = X$.
+    Where each of the $E_k$ are disjoint, $E_k \in S$, and $\bigcup_k^{n} = X$.
 \end{definition}
 
 \begin{remark}
@@ -1198,7 +1197,7 @@ Now finally integration with respect to measure.
 \end{definition}
 
 
-Finally taking our function from from earlier
+Finally recall our function from earlier
 \begin{equation*}
     f = \lim_{n \to \infty} f_n = \begin{cases}
                         1: & x \in \mathbb{Q} \cap [0, 1] \\
@@ -1206,18 +1205,43 @@ Finally taking our function from from earlier
                         \end{cases}
 \end{equation*}
 
-and the $S$-Partition 
+Consider the $S$-Partition.
 \begin{equation*}
     \{[0, 1]\, \cap \, \mathbb{Q}, [0, 1] \setminus \mathbb{Q}\}
 \end{equation*}
 
-gives us
+From earlier 
+\begin{equation*}
+    [0, 1]\, \cap \, \mathbb{Q}
+\end{equation*}
+
+is measure 0, where
+
+\begin{equation*}
+    \inf_{[0, 1]\, \cap \, \mathbb{Q}} f = 1
+\end{equation*}
+
+forcing
+
+\begin{equation*}
+    [0, 1] \setminus \mathbb{Q}
+\end{equation*}
+
+to be measure 1 since we know $|[0, 1]| = 1$ and the two sets
+union to $[0, 1]$.
+
+Where
+\begin{equation*}
+    \inf_{[0, 1] \setminus \mathbb{Q}} f = 0
+\end{equation*}
+
+Integrating with respect to measure then we get the following equation
 \begin{equation}
     \int f \, d\mu = (0)(1) + (1)(0)
 \end{equation}
 
-Where from left to right we have, measure 0 times height 1 plus
-measure 1 times height 0.
+Where from left to right we have, measure 0 times inf 1 plus
+measure 1 times inf 0.
 
 \section{Conclusion}
 I began with Riemann integration failing to exist at the point wise limit
