@@ -5,6 +5,8 @@
 \usepackage{titlesec}
 \usepackage{comment}
 \usepackage[framemethod=TikZ]{mdframed}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing}
 
 \onehalfspacing
 \setlength{\jot}{12pt}
@@ -310,9 +312,12 @@ riemann and lebesgue measure break here, its a motivation for DCT)
 
 
 
-(What is my goal?)
-(Examples of less abstract things that are know.)
-(Counter examples.)
+The Riemann integral works well for continuous functions, but it behaves badly
+under limits: a sequence of Riemann integrable functions can converge pointwise to a
+function that is not Riemann integrable at all. The goal of this paper is to show
+exactly how this failure happens, to explain it in the language of measure, to show
+why we cannot simply measure every subset of $\mathbb{R}$, and finally to show
+that integrating with respect to a measure resolves the original example.
 
 
 % DEFINITIONS SECTION
@@ -382,8 +387,42 @@ Now defining Riemann Integration.
 
 
 Notice from the definition that a function being Riemann Integrable relies on
-us finding a partition in which the upper and lower sums converge. In general
-how do we know before checking if a function will be Riemann Integrable?
+us finding partitions on which the upper and lower sums become arbitrarily close.
+In general, how can we tell in advance whether a function is Riemann Integrable?
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  \def\f(#1){0.4+1.6*(#1)-0.35*(#1)*(#1)}
+  % Riemann
+  \begin{scope}
+    \foreach \a/\b in {0/0.5,0.5/1,1/1.5,1.5/2,2/2.5,2.5/3}{
+      \pgfmathsetmacro{\lo}{\f(\a)}\pgfmathsetmacro{\hi}{\f(\b)}
+      \fill[gray!25] (\a,0) rectangle (\b,\hi);
+      \fill[gray!55] (\a,0) rectangle (\b,\lo);
+      \draw[gray!70!black,thin] (\a,0) rectangle (\b,\hi);}
+    \draw[thick,domain=0:3,samples=60] plot (\x,{\f(\x)});
+    \draw[->] (0,0) -- (3.3,0) node[right]{$x$};
+    \draw[->] (0,0) -- (0,2.4);
+    \node at (1.5,-0.95) [align=center]{\small Riemann:\\ \small partition the domain};
+  \end{scope}
+  % Lebesgue
+  \begin{scope}[xshift=5.2cm]
+    \foreach \y in {0.4,0.8,1.2,1.6,2.0}{\draw[gray!60,dashed] (0,\y) -- (3,\y);}
+    \foreach \y in {0.4,0.8,1.2,1.6,2.0}{
+      \pgfmathsetmacro{\xs}{max(0,(1.6-sqrt(2.56-1.4*(\y-0.4)))/0.7)}
+      \fill[gray!40,draw=gray!70!black,thin] (\xs,\y-0.4) rectangle (3,\y);}
+    \draw[thick,domain=0:3,samples=60] plot (\x,{\f(\x)});
+    \draw[very thick,blue!70!black] (0.55,0) -- (3,0);
+    \node[blue!70!black,below] at (1.8,0) {\scriptsize $f^{-1}([1.2,\infty))$};
+    \draw[->] (0,0) -- (3.3,0) node[right]{$x$};
+    \draw[->] (0,0) -- (0,2.4);
+    \node at (1.5,-0.95) [align=center]{\small Lebesgue:\\ \small partition the range};
+  \end{scope}
+\end{tikzpicture}
+\caption{Riemann sums cut the domain into intervals; the Lebesgue integral groups
+points by the value of $f$ and asks only for the \emph{measure} of each such set.}
+\end{figure}
 
 
 
@@ -407,6 +446,24 @@ Let $f_n(x)$ be a series of functions defined on $[0, 1]$ of the form
           \end{cases}
 \end{equation}
 
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[xscale=9,yscale=1.4]
+  \draw[->] (0,0) -- (1.06,0) node[right]{$x$};
+  \draw[->] (0,0) -- (0,1.35);
+  \node[left] at (0,1) {\small $1$};
+  \foreach \r in {0,1,0.5,0.3333,0.6667,0.25,0.75}{
+    \draw[thick] (\r,0) -- (\r,1); \fill (\r,1) circle (0.35pt);}
+  \foreach \r in {0.2,0.4,0.6,0.8,0.1667,0.8333}{
+    \draw[gray!60,dashed] (\r,0) -- (\r,1); \draw[gray!60] (\r,1) circle (0.35pt);}
+  \node[below] at (0,0) {\small $0$}; \node[below] at (1,0) {\small $1$};
+  \node[below] at (0.5,0) {\small $\tfrac12$};
+\end{tikzpicture}
+\caption{$f_7$ for the enumeration $0,1,\tfrac12,\tfrac13,\tfrac23,\tfrac14,\tfrac34,\ldots$:
+finitely many spikes (solid), each invisible to the integral. Dashed spikes are switched on
+for larger $n$; in the limit every rational has one.}
+\end{figure}
+
 
 % UPPER AND LOWER SUMS
 \subsubsection{Riemann Integration}
@@ -419,8 +476,8 @@ for every $\epsilon > 0$, for some partition $P_n$.
 
 To begin fix $n \in \mathbb{N}$.
 
-Take the partition $P_n$ such that $(x_k - x_{k-1}) = \frac{\epsilon}{4n}$ for all consecutive
-pairs of points in $P_n$. 
+Take the partition $P_n$ such that $(x_k - x_{k-1}) \leq \frac{\epsilon}{4n}$ for all consecutive
+pairs of points in $P_n$ (the last interval may be shorter).
 \begin{equation*}
     P = \{0, \frac{\epsilon}{4n}, \frac{2\epsilon}{4n}, \ldots, 1\}
 \end{equation*}
@@ -446,7 +503,7 @@ each with $\sup_{[x_k - x_{k-1}]} f = 0$.
 
 This gives
 \begin{equation*}
-    U(f_n, P_n) = (\frac{\epsilon}{4n})(2n)(1) + (1)(0) = \frac{\epsilon}{2}
+    U(f_n, P_n) \leq (\frac{\epsilon}{4n})(2n)(1) + (1)(0) = \frac{\epsilon}{2}
 \end{equation*}
 
 For the lower sums, since $\mathbb{I}$ is dense in $\mathbb{R}$, 
@@ -459,14 +516,15 @@ This gives
     L(f_n, P_n) = 0
 \end{equation*}
 
-This gives for any $\epsilon > 0$ for some $N \in \mathbb{N}$ whenever $n \geq N$
+This gives, for our fixed $n$ and any $\epsilon > 0$,
 \begin{equation*}
-    U(f_n, P_n) - L(f_n, P_n) = \frac{\epsilon}{2} < \epsilon
+    U(f_n, P_n) - L(f_n, P_n) \leq \frac{\epsilon}{2} < \epsilon
 \end{equation*}
 
-meaning the function is Riemann integrable with
+meaning $f_n$ is Riemann integrable. Moreover $0 = L(f_n) = U(f_n) \leq \frac{\epsilon}{2}$
+for every $\epsilon > 0$, so
 \begin{equation*}
-    \int_{0}^{1} f_n \, dx = L(f_n) = 0
+    \int_{0}^{1} f_n \, dx = 0
 \end{equation*}
 
 
@@ -607,8 +665,8 @@ Making
     D_n = \{r_1, r_2, \ldots, r_n\}
 \end{equation*}
 
-For any points $c \not\in \{r_1, r_2, \ldots, r_n\}$ we can take $\delta = \frac{\min(|x - r_1|, |x - r_2|,
-\ldots, |x - r_n|)}{2}$ since there are a fixed amount of rationals for any fixed $n \in \mathbb{N}$.
+For any points $c \not\in \{r_1, r_2, \ldots, r_n\}$ we can take $\delta = \frac{\min(|c - r_1|, |c - r_2|,
+\ldots, |c - r_n|)}{2} > 0$ since there are a fixed amount of rationals for any fixed $n \in \mathbb{N}$.
 
 This would give us for 
 \begin{equation*}
@@ -635,10 +693,30 @@ giving
     \sum_k l(O_k) \leq \epsilon
 \end{equation*} 
 
-making $D_n$ measure 0 by definition.
+making $D_n$ measure 0 by definition. The same covering, taken over the whole
+enumeration $r_1, r_2, \ldots$, shows that $\mathbb{Q} \cap [0, 1]$ itself has measure 0
+(Figure~\ref{fig:cover}).
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[xscale=10,yscale=4]
+  \draw[thick] (0,0) -- (1,0);
+  \node[below] at (0,0) {\small $0$}; \node[below] at (1,0) {\small $1$};
+  \foreach \r/\k/\h in {0.5/1/0.16,0.3333/2/0.08,0.6667/3/0.04,0.25/4/0.02,0.75/5/0.01}{
+    \fill[blue!20] (\r-\h,0.08*\k) rectangle (\r+\h,0.08*\k+0.06);
+    \fill (\r,0) circle (0.12pt);
+    \draw[gray,very thin] (\r,0) -- (\r,0.08*\k);}
+  \node[right] at (0.68,0.11) {\scriptsize $O_1$, length $\epsilon/2$};
+  \node[right] at (0.77,0.44) {\scriptsize $O_5$, length $\epsilon/2^5$};
+\end{tikzpicture}
+\caption{Covering the rationals $r_1, r_2, \ldots$ by intervals of length $\epsilon/2^k$
+(stacked vertically for visibility). The total length is at most $\epsilon$, however small
+$\epsilon$ is chosen.}
+\label{fig:cover}
+\end{figure}
 
 We now understand why each $f_n$ integrates but $f$ itself fails to integrate.
-Our understanding lays not in the language of the Riemann integral itself but instead in the
+Our understanding lies not in the language of the Riemann integral itself but instead in the
 language of measure.  
 
 We also see that the method by which we partition the domain fails for functions
@@ -647,7 +725,7 @@ that oscillate too quickly and will fail to be defined in spaces outside of $\ma
 
 \subsection{Lebesgue Savior}
 
-Under mild assumptions, integrating with respect to measure can gives us
+Under mild assumptions, integrating with respect to measure gives us
 \begin{equation}
     \lim_{n \to \infty} \int f_n \, d\mu = 0 = \int f \, d\mu
 \end{equation}
@@ -682,7 +760,7 @@ Let $|.|$ denote outer measure.
 I will now prove each in order.
 
 % MONOTONCITY
-\begin{proof}[Proof: Monotoncity]
+\begin{proof}[Proof: Monotonicity]
     For monotonicity (1) first observe that since 
     \begin{equation*}
         A \subset B \subset \bigcup_k O_k
@@ -801,6 +879,8 @@ I will now prove each in order.
         A = \bigcup_k A_k
     \end{equation*}
 
+    If some $|A_k| = \infty$ there is nothing to prove, so assume each $|A_k| < \infty$
+    and fix $\epsilon > 0$.
     Since outer measure is $\inf$ over all open covers, take for each $A_k$ the open cover
     $O_k = \bigcup_i O_{ki}$ where
     \begin{equation*}
@@ -815,8 +895,8 @@ I will now prove each in order.
     Meaning
     \begin{align*}
         |A| &\leq \sum_k \sum_i l(O_{ki}) \\
-        &< \sum_k |A_k| + \frac{\epsilon}{2^{k+1}} \\
-        &= \sum_k |A_k| + \frac{\epsilon}{2} \\
+        &< \sum_k \left( |A_k| + \frac{\epsilon}{2^{k+1}} \right) \\
+        &= \sum_k |A_k| + \frac{\epsilon}{2}
     \end{align*}
 
     Which holds for all $\epsilon > 0$ giving
@@ -861,7 +941,7 @@ I will now prove each in order.
         l(O_k) = l(O_k + t)
     \end{equation*}
 
-    Making the set of covers of $A$ is a subset of the set of covers of $A + t$.
+    So translating a cover of $A$ by $t$ gives a cover of $A + t$ with the same total length.
 
     Let 
     \begin{equation*}
@@ -897,7 +977,7 @@ we would additionally want to see.
     |\bigcup_k A_k| = \sum_k |A_k|
 \end{equation}
 
-Which is not much different then our property of sub-additivity. This may seem
+This is not much different than our property of sub-additivity. This may seem
 intuitively true at first, but as we will see in a moment this is not actually true for
 all sets. Therefore we would like to be explicit about where and when the
 properties holds to be coherent in our application of measure theory.
@@ -923,9 +1003,9 @@ To be an equivalence relation it must satisfy the following properties
 
 
 \begin{proof}[Proof: Equivalence Relation]
-    For $x \sim s$, notice for any value $x$, $x - x = 0$ and $0 \in \mathbb{Q}$.
+    For $x \sim x$, notice for any value $x$, $x - x = 0$ and $0 \in \mathbb{Q}$.
 
-    For $x \sim y \implies y \sim x$, notice that $y - x = -1(x - y)$ where $\mathbb{Q}$ is close under
+    For $x \sim y \implies y \sim x$, notice that $y - x = -1(x - y)$ where $\mathbb{Q}$ is closed under
     multiplication.
 
     For $x \sim y$ and $y \sim z$, then $x \sim z$, notice $(x - y) + (y - z) = (x - z)$
@@ -934,39 +1014,39 @@ To be an equivalence relation it must satisfy the following properties
 
 
 \begin{definition}[Equivalence Class on $[0, 1{]}$]
-    An equivalence class on $[0, 1]$ is a set of all equivalent elements $\{y: y \sim x\}$
-    for all $x \in [0, 1]$
+    For $x \in [0, 1]$, the equivalence class of $x$ on $[0, 1]$ is the set
+    $\{y \in [0, 1] : y \sim x\} = (\mathbb{Q} + x) \cap [0, 1]$.
 \end{definition}
 
 \begin{lemma}
-    Any two equivalence classes on $[0, 1]$ are disjoint.
+    Any two distinct equivalence classes on $[0, 1]$ are disjoint.
 \end{lemma}
 
 \begin{proof}[Proof: Equivalence Classes Disjoint]
-Suppose for contradiction the intersection of two equivalence classes was non empty.
+Let $A$ and $B$ be equivalence classes and suppose their intersection is non empty;
+I will show $A = B$.
 
-Let there be some element in $A$ call it $z$ and the same element in $B$. 
+Let $z \in A \cap B$.
 For arbitrary $x \in A$ and $y \in B$, $x - z \in \mathbb{Q}$ and
-$y - z \in \mathbb{Q}$ . Let $x - z = u$ and $y - z = v$.
-\end{proof}
+$y - z \in \mathbb{Q}$. Let $x - z = u$ and $y - z = v$.
 
-Solving for $x$ and $y$ gives $x = u - z$ and $y = v - z$. Now subtracting $x - y$, we get
+Solving for $x$ and $y$ gives $x = u + z$ and $y = v + z$. Now subtracting, we get
 \begin{equation*}
-    x - y = (u - z) - (v - z) = u - v
+    x - y = (u + z) - (v + z) = u - v
 \end{equation*}
 
 But $u, v \in \mathbb{Q}$, where $\mathbb{Q}$ is closed
-under subtraction, giving $x - y \in \mathbb{Q}$. Which says $x \sim y$. 
+under subtraction, giving $x - y \in \mathbb{Q}$, which says $x \sim y$.
 
-Taking any $x \in A$ gives $x \sim y$ for some $y \in B$ forcing $x \in B$. Making
-$A \subset B$. Similarly taking any $y \in B$ gives $y \sim x$ for some $x \in A$. Making
-$B \subset A$ or $A = B$. 
+So every $x \in A$ is equivalent to an element of $B$, forcing $x \in B$, making
+$A \subset B$. Symmetrically $B \subset A$, so $A = B$.
 
-Therefore any two equivalence classes on $[0, 1]$ are disjoint.
+Therefore two equivalence classes are either equal or disjoint.
+\end{proof}
 
 
 % VITALLI
-\subsubsection{Vitalli}
+\subsubsection{Vitali}
 
 For the following argument I will use the Axiom of Choice to show that, countable additivity
 does not necessarily hold for all subsets of $\mathbb{R}$.
@@ -977,14 +1057,18 @@ does not necessarily hold for all subsets of $\mathbb{R}$.
     set one of its elements.
 \end{axiom}
 
-To begin, let a set $V$ contain a single element from each equivalence class on $[0, 1]$. 
+To begin, using the Axiom of Choice, let a set $V$ contain exactly one element from each
+equivalence class on $[0, 1]$.
 The equivalence classes on the interval $[0, 1]$ are of the form $(\mathbb{Q} + x) \cap [0, 1]$.
-Making $V$ uncountable.
+Each class is countable while $[0, 1]$ is not, so there are uncountably many classes,
+making $V$ uncountable.
 
-Now consider the translations $V + q$ for $q \in [-1, 1] \cap \mathbb{Q}$. 
+Now consider the translations $V + q$ for $q \in [-1, 1] \cap \mathbb{Q}$. Crucially, there
+are only \emph{countably} many such $q$, so we may enumerate them $q_1, q_2, \ldots$ and
+countable additivity applies to this family.
 
 \begin{lemma}
-    For any $p, q \in [-1, 1] \cap \mathbb{Q}$, the sets $V + p$ and $V + q$ are disjoint.
+    For any distinct $p, q \in [-1, 1] \cap \mathbb{Q}$, the sets $V + p$ and $V + q$ are disjoint.
 \end{lemma}
 
 
@@ -994,33 +1078,50 @@ To see this suppose some element $w$ existed such that
 \begin{equation*}
     w \in (V + p) \cap (V + q)
 \end{equation*}
-for $p, q \in \mathbb{Q} \cap [0, 1]$. 
+for $p, q \in \mathbb{Q} \cap [-1, 1]$.
 
-Then $w = v + p$ for some $v \in V$ and 
-$w = u + q$ for some $u \in V$. So 
+Then $w = v + p$ for some $v \in V$ and
+$w = u + q$ for some $u \in V$. So
 \begin{equation*}
-    v - w = p - q
+    v - u = q - p
 \end{equation*}
 making $v - u \in \mathbb{Q}$.
 
-Meaning $v \sim u$, but $V$ only contains one element from each equivalence class meaning $v = u$
-forcing $p = q$. But that says the translated classes are the same, meaning each
-translated class must be disjoint.
+Meaning $v \sim u$, but $V$ only contains one element from each equivalence class, so $v = u$,
+forcing $p = q$. Hence if $p \neq q$ the translates $V + p$ and $V + q$ are disjoint.
 \end{proof}
 
-Now I will show that the translated classes are bounded in measure but infinite summations of
-values; a contradiction.
+Now I will show that the union of the translates has bounded, positive outer measure, while
+a countable sum of equal values can only be $0$ or $\infty$; a contradiction.
 
-\begin{lemma}[Vitalli Bounded]
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[xscale=3,yscale=1.6]
+  \draw[->] (-1.25,0) -- (2.25,0);
+  \foreach \x in {-1,0,1,2}{\draw (\x,0.08) -- (\x,-0.08) node[below]{\small $\x$};}
+  \draw[decorate,decoration={brace,mirror,amplitude=4pt}] (0,-0.3) -- (1,-0.3)
+     node[midway,below=4pt]{\small $[0,1]$, where $V$ lives};
+  \foreach \s/\c/\y/\t in {0/blue/0.25/V,0.5/red/0.6/V+\tfrac12,-0.5/green!50!black/0.95/V-\tfrac12,0.25/orange/1.3/V+\tfrac14}{
+    \foreach \v in {0.04,0.13,0.27,0.41,0.55,0.62,0.79,0.93}{
+      \fill[\c] (\v+\s,\y) circle (0.9pt);}
+    \node[\c,right] at (2.05,\y) {\scriptsize $\t$};}
+  \draw[dashed,gray] (-1,0.1) rectangle (2,1.5);
+  \node[gray,below] at (0.5,-0.75) {\small all translates $V+q$, $q \in \mathbb{Q}\cap[-1,1]$, lie in $[-1,2]$};
+\end{tikzpicture}
+\caption{Schematic of the Vitali construction: disjoint rational translates of $V$
+that together cover $[0,1]$ yet stay inside $[-1,2]$.}
+\end{figure}
+
+\begin{lemma}[Vitali Bounded]
     $[0, 1] \subset \bigcup_q (V + q) \subset [-1, 2]$
 \end{lemma}
 
-\begin{proof}[Proof: Vitalli Bounded]
+\begin{proof}[Proof: Vitali Bounded]
 Take any arbitrary $x \in [0, 1]$.
 
-$x$ sits in some equivalence class since $V$ contains some representative from that class.
+$x$ sits in some equivalence class, and $V$ contains a representative $v$ of that class.
 
-Meaning $x - v = q$ for some $q \in \mathbb{Q}$ and some $v \in V$. 
+Meaning $x - v = q$ for some $q \in \mathbb{Q}$.
 
 Since both $x, v \in [0, 1]$ it implies that $q \in [-1, 1] \cap \mathbb{Q}$.
 Since $\bigcup_q (V + q)$ is a union over all $q \in [-1, 1] \cap \mathbb{Q}$, we have
@@ -1051,8 +1152,8 @@ Which implies
     1 \leq |\bigcup_q (V + q)| \leq 3
 \end{equation}
 
-Since outer measure is translation invariant for any unique $p, q$
-$|V + q| = |V + p|$.
+Since outer measure is translation invariant, $|V + q| = |V|$ for every $q$, so all of the
+translates have the same outer measure.
 
 Now suppose it is true for disjoint sets
 \begin{equation}
@@ -1064,17 +1165,18 @@ then
     |\bigcup_q (V + q)| = \sum_q |(V + q)|
 \end{equation}
 
-Suppose that $|(V + q)| > 0$, since there are an infinite amount of $q \in [-1, 1]$ it would force
-$\sum_q |(V + q)| = \infty$. 
+This is a sum of countably infinitely many copies of the single number $|V|$.
+Suppose that $|V| > 0$; since there are infinitely many $q \in [-1, 1] \cap \mathbb{Q}$ it would force
+$\sum_q |(V + q)| = \infty$.
 
-Suppose then that $|(V + q)| = 0$, it would then force $\sum_q |(V + q)| = 0$.
+Suppose then that $|V| = 0$, it would then force $\sum_q |(V + q)| = 0$.
 
 Measure is non negative meaning $|(V + q)| \geq 0$, but either gives a contradiction to
 \begin{equation}
     1 \leq |\bigcup_q (V + q)| \leq 3
 \end{equation}
 
-Meaning for the vitalli set, (a valid subset of R from the Axiom of Choice)
+Meaning for the Vitali set (a valid subset of $\mathbb{R}$ given the Axiom of Choice)
 \begin{equation}
     |\bigcup_k A_k| = \sum_k |A_k|
 \end{equation}
@@ -1085,8 +1187,8 @@ Meaning it is not true in general and therefore we can not assert that
     |\bigcup_k A_k| = \sum_k |A_k|
 \end{equation}
 
-This as you will see later actually implies that outer measure is not a valid measure on
-all subsets of R.
+for the disjoint family $A_k = V + q_k$. As we will see, this means outer measure is not a
+measure on the collection of all subsets of $\mathbb{R}$.
 
 
 % INTEGRATION ON MEASURE
@@ -1103,14 +1205,15 @@ Before that I will define a $\sigma$-algebra and measurable space.
     following three properties.
 
     \begin{enumerate}
-        \item $\null \in S$
-        \item for any set $E \in S$, $X \ E \in S$
+        \item $\emptyset \in S$
+        \item for any set $E \in S$, $X \setminus E \in S$
         \item for any sequence of sets $E_1, E_2, \ldots$ where each $E_k \in S$, $\bigcup_k E_k \in S$
     \end{enumerate}
 \end{definition}
 
 From the properties we can quickly derive $X \in S$. First observe
-$X \ E$ is $\{x \in X: x \not\in E\}$. Then from the first two properties $X \in S$.
+$X \setminus E$ is $\{x \in X: x \not\in E\}$. Then from the first two properties
+$X = X \setminus \emptyset \in S$.
 
 Additionally it follows from De Morgan's laws that for any $E_1, E_2, \ldots$ 
 where each $E_k \in S$, $\bigcap_k E_k \in S$.
@@ -1131,16 +1234,16 @@ Where the last line follows from
 
 \begin{remark}
     Notice that $S$ is defined specifically such that it contains the sets for which
-    we later want to apply countable additivity too.
+    we later want to apply countable additivity to.
 \end{remark}
 
 
-% MEASURE SPACE
-I will now define a measure space.
+% MEASURABLE SPACE
+I will now define a measurable space.
 
-\begin{definition}[Measure Space]
-    A measure space is defined as a set $X$ and a $\sigma$-algebra 
-    defined on the set $X$ denoted by $(X , S)$.
+\begin{definition}[Measurable Space]
+    A measurable space is a pair $(X, S)$ where $X$ is a set and $S$ is a $\sigma$-algebra
+    on $X$.
 \end{definition}
 
 
@@ -1148,31 +1251,38 @@ I will now define a measure space.
 Now to define a measure and a measure space.
 
 \begin{definition}[Measure Space]
-    Let $(X, S)$ be a measurable space. $\mu$ is a measure on the measure space, denoted
-    by $(X, S, \mu)$, if $\mu(\null) = 0$, and $\mu(\bigcup_k E_k) = \sum_k \mu(E_k)$ for disjoint
-    $E_k$ where each $E_k$ in $S$. 
+    Let $(X, S)$ be a measurable space. A function $\mu \colon S \to [0, \infty]$ is a
+    measure if $\mu(\emptyset) = 0$ and $\mu(\bigcup_k E_k) = \sum_k \mu(E_k)$ for every
+    sequence of disjoint sets $E_1, E_2, \ldots \in S$. The triple $(X, S, \mu)$ is then called
+    a measure space.
 \end{definition}
+
+\begin{remark}
+    The Lebesgue measure is outer measure restricted to a suitable $\sigma$-algebra
+    (the Lebesgue measurable sets), which contains every interval and every countable set
+    but, by the previous section, not the Vitali set. I take its construction as given here.
+\end{remark}
 
 Now we can define integration with respect to measure and prove our result from earlier.
 First again I will define partitions and lower sums.
 
 % S-PARITITONS
-\begin{definition}[$S$-Parititions]
-    Let $(X, S, \mu)$ be a measure space, then $P$ an $S$-Partitions is defined as
+\begin{definition}[$S$-Partitions]
+    Let $(X, S, \mu)$ be a measure space, then an $S$-partition $P$ is defined as
     \begin{equation}
         P = \{E_1, E_2, \ldots, E_n\}
     \end{equation}
 
-    Where each of the $E_k$ are disjoint, $E_k \in S$, and $\bigcup_k^{n} = X$.
+    Where each of the $E_k$ are disjoint, $E_k \in S$, and $\bigcup_{k=1}^{n} E_k = X$.
 \end{definition}
 
 \begin{remark}
-    Notice again $P$ contains finite sets.
+    Notice again $P$ is a finite collection of sets, but the sets themselves need not be intervals.
 \end{remark}
 
 %S-MEASRUABLE F
 \begin{definition}[S-Measurable]
-    Let $(X, S, \mu)$ be a measurable space. A function $f$ is $S$-measurable
+    Let $(X, S)$ be a measurable space. A function $f \colon X \to [-\infty, \infty]$ is $S$-measurable
     if $f^{-1}((a, \infty)) \in S$ for every real number $a$. 
 \end{definition}
 
@@ -1190,9 +1300,10 @@ First again I will define partitions and lower sums.
 
 Now finally integration with respect to measure.
 
-% LEBESEGUE MEASURE
-\begin{definition}[Lebesgue Measure]
-    Let $(X, S, \mu)$ be a measure space.
+% INTEGRAL WITH RESPECT TO A MEASURE
+\begin{definition}[Integral with Respect to a Measure]
+    Let $(X, S, \mu)$ be a measure space and $f \colon X \to [0, \infty]$ an $S$-measurable function.
+    The integral of $f$ with respect to $\mu$ is
     \begin{equation}
         \int f \, d\mu = \sup_{P} L(f, P)
     \end{equation}
@@ -1239,11 +1350,25 @@ Where
 
 Integrating with respect to measure then we get the following equation
 \begin{equation}
-    \int f \, d\mu = (0)(1) + (1)(0)
+    L(f, P) = (0)(1) + (1)(0) = 0
 \end{equation}
 
 Where from left to right we have, measure 0 times inf 1 plus
-measure 1 times inf 0.
+measure 1 times inf 0. This shows $\int f \, d\mu \geq 0$.
+
+For the reverse inequality, take any $S$-partition $\{E_1, \ldots, E_n\}$ of $[0, 1]$.
+If $\mu(E_k) > 0$ then $E_k$ cannot lie inside $\mathbb{Q} \cap [0, 1]$, which has measure 0,
+so $E_k$ contains an irrational and $\inf_{E_k} f = 0$. If $\mu(E_k) = 0$ the term
+$\mu(E_k) \inf_{E_k} f$ is $0$ anyway. Hence every lower sum is $0$, and
+\begin{equation}
+    \int f \, d\mu = \sup_P L(f, P) = 0
+\end{equation}
+
+So the function that Riemann integration could not handle has a perfectly good integral
+with respect to measure, and it agrees with the limit of the Riemann integrals:
+\begin{equation*}
+    \lim_{n \to \infty} \int_0^1 f_n \, dx = 0 = \int f \, d\mu.
+\end{equation*}
 
 \section{Conclusion}
 I began with Riemann integration failing to exist at the point wise limit
